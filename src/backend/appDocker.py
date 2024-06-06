@@ -532,6 +532,9 @@ async def get_gemeente_videos(gemeente: str, meetingType: str, year: str):
 
 @app.get("/api/getVideoData")
 async def get_gemeente_video_data(gemeente: str, meetingType: str, year: str, video: str):
+    # tmp hardcoded because ffmpeg is not installed on the server
+    return {"status": "OK", "duration": 4290}
+
     p = None
     for path in BASE_PATHS:
         if os.path.isfile(f"{path}/{gemeente}/{meetingType}/{year}/videos/{video}"):
