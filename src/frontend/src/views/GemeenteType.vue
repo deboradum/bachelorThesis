@@ -15,7 +15,15 @@ const gemeenteYears = ref([]);
 
 fetch(`http://127.0.0.1:3012/api/gemeenteYears?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}`)
     .then(response => response.json())
-    .then(data => gemeenteYears.value = data.years)
+    .then(data => {
+        gemeenteYears.value = data.years;
+        gemeenteYears.value.sort((a, b) => {
+            return parseInt(a.year) - parseInt(b.year);
+        });
+    })
+    .catch(error => {
+        console.error('Error fetching data:', error);
+    });
 
 
 function goToGemeenteYear(gemeente, type, year) {
