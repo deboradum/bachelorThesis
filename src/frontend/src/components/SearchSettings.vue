@@ -12,7 +12,7 @@ const props = defineProps({
     availableAgenda: Array,
 })
 
-const searchMethod = ref("hybrid");
+const searchMethod = ref("bm25");
 const searchLimit = ref(10);
 const searchalpha = ref(0.5);
 const searchGemeente = ref("");
