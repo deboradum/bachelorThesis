@@ -44,6 +44,7 @@ fetch(`http://127.0.0.1:3012/api/getVideo?gemeente=${route.params.gemeenteName}&
 fetch(`http://127.0.0.1:3012/api/getSpeakers?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
 .then(response => response.json())
 .then(data => {
+    console.log(data.speakers)
     speakers.value = data.speakers
     createSpeakerMapping()
     createSpeakerNameMapping()
@@ -198,7 +199,7 @@ function goToVideoPosition() {
 }
 
 function isOffset() {
-    console.log(speakers.value)
+    // console.log(speakers.value)
     if (!speakers.value) return false
     if (speakers.value.length == 0) return false
     else return speakers.value[0].start > 0
@@ -289,18 +290,18 @@ async function downloadInfo() {
                             </div>
 
                             <div :style="{ width: hrWidth + 'px' }" class="flex flex-row flex-nowrap mb-2">
-                                <!-- <hr v-if="isOffset()" :style="{ width: speakers[0].start + 'px' }"
-                                    class=" h-3 border-0 rounded bg-transparent"> -->
-                                <!-- TMP hot fix! should be the above commented loc -->
-                                    <hr :style="{ width: 35 + 'px' }"
+                                <hr v-if="isOffset()" :style="{ width: speakers[0].start + 'px' }"
                                     class=" h-3 border-0 rounded bg-transparent">
+                                <!-- TMP hot fix! should be the above commented loc -->
+                                    <!-- <hr :style="{ width: 14 + 'px' }"
+                                    class=" h-3 border-0 rounded bg-transparent"> -->
                                 <hr v-for="s in speakers" :style="{ width: s.end-s.start + 'px' }"
                                     class=" h-3 border-0 rounded" :class="speakerColors[s.speaker]" :title="s.name">
                             </div>
 
                             <div @mousemove="updateLinePosition" @mouseleave="resetLinePosition"
                                 @click="goToVideoPosition" class="pb-4">
-                                <hr :style="{ width: hrWidth + 'px' }" class="h-3 border-0 rounded dark:bg-gray-700">
+                                <hr :style="{ width: hrWidth + 'px' }" class="h-3 border-0 rounded bg-gray-700">
                             </div>
                         </div>
                     </div>
