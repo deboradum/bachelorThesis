@@ -293,7 +293,7 @@ async function downloadInfo() {
                                 <hr v-if="isOffset()" :style="{ width: speakers[0].start + 'px' }"
                                     class=" h-3 border-0 rounded bg-transparent">
                                 <!-- TMP hot fix! should be the above commented loc -->
-                                    <!-- <hr :style="{ width: 14 + 'px' }"
+                                    <!-- <hr :style="{ width: 2 + 'px' }"
                                     class=" h-3 border-0 rounded bg-transparent"> -->
                                 <hr v-for="s in speakers" :style="{ width: s.end-s.start + 'px' }"
                                     class=" h-3 border-0 rounded" :class="speakerColors[s.speaker]" :title="s.name">
