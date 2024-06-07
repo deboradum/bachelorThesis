@@ -392,13 +392,17 @@ class Embedder:
 Choosing the right embedding model for this project was not as easy as looking at the current leaderboard and selecting the best performing model. The reason for this is the large number of embedding models that are each optimised for different niche use cases. 
 The main requirements for this project was that the model needs to be lightweight, quick, and multilingual. Since thousands of hours of video material needs to be embedded, a quick and light model is important. Even more important however, is multilinguality. Multilinguality ensures that semantically similar sentences in different languages will still map close to each other in the vector space. Since most monolingual embedding model are trained on English text, running these models on Dutch sentences will lead to suboptimal performance.
 
-% TODO: Vertellen over hoe ik tot mpnetv2 ben gekomen en de tests ervoor
+In the end I chose sentence-transformers/all-mpnet-base-v2. Its small size, its small size of only 109 million and multilingual capabilities make it the perfect model for this task.
 
-\subsection{Meeting points}
+\subsection{Agenda points}
+Some of the meetings already have agenda points provided by the archiving host. For the meetings where this is not the case, a custom agenda point generator that utilizes LLMs has been written.
+
+First, the transcript of a meeting is fed in to an LLM with the task to give the most important subjects of the meeting. 
+Next, for each subject, the LLM is given the task to figure out when the agenda point starts in the meeting. This is done using a sliding window over the transcript. A couple sentences at a time, along with their starting time, are added to the input, after which the LLM will return either true or false depending on if the agenda point starts at the correct time.
 
 \section{Retrieval}
 \subsection{Weaviate}\label{sec:weaviate}
-Unlike the previously mentioned clients, the Weaviate client is not as modular. One of the reasons for this is that releases of new and better database systems are less common that new models. 
+Unlike the aforementioned mentioned clients, the Weaviate client is not as modular. One of the reasons for this is that releases of new and better database systems are less common that new models. 
 
 The created Weaviate client has methods for various default operations such as creating and deleting collections (similar to tables in relational databases), inserting and deleting entries and getting collection metadata. Besides these basic operations, three search methods from section \ref{retrievalSection} have been implemented: Vector search, BM25 search and Hybrid search.
 
@@ -497,8 +501,24 @@ A collar is a margin of time around each speaker turn boundary. A 250 millisecon
     \label{fig:pyanExperiment}
 \end{figure}
 
-\subsection{Meeting points}
-% Schrijven over dat meeting points niet efficient (en accuraat?) is. Duurt heel lang met LLM enzo
+\subsection{Agenda points}
+As it tuned out, some meetings already had their agenda points public and labeled. I used these known agenda points to test the video segmentation script, thus answering the research question \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}?
+
+I ran the script on 10 different meetings, using their provided agenda points as a ground truth. Next, I counted the number of missed agenda points, the number of false agenda points and how far from the true starting point the LLM estimated the agenda points to be.
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{}
+    \caption{Agenda point segmentation results}
+    \label{fig:agendaSegmResults}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics[width=0.85\textwidth]{}
+    \caption{Agenda points timing results}
+    \label{fig:agendaTimeResults}
+\end{figure}
 
 \section{Search engine}
 To Answer the main research question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? and the subquestion \textit{how well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed}?, I gathered 20 participants and tasked them to find the answer to five questions using five different search methods.
