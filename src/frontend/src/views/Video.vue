@@ -198,6 +198,7 @@ function goToVideoPosition() {
 }
 
 function isOffset() {
+    console.log(speakers.value)
     if (!speakers.value) return false
     if (speakers.value.length == 0) return false
     else return speakers.value[0].start > 0
@@ -255,7 +256,7 @@ async function downloadInfo() {
                     video {{
                     route.params.videoID }}.mp4
                 </h1>
-                <button @click="downloadInfo()" >Download information</button>
+                <button @click="downloadInfo()">Download information</button>
                 <div class="my-6 max-w-4xl flex flex-col justify-center">
                     <video v-if="videoUrl" id="videoPlayer" controls preload="auto">
                         <source :src="videoUrl" type="video/mp4">
@@ -283,13 +284,15 @@ async function downloadInfo() {
 
                         <div>
                             <div :style="{ width: hrWidth + 'px' }" class="flex flex-row flex-nowrap mb-2">
-                                <hr v-for="a in agenda" :style="{ width: a.time + 'px' }"
-                                    class=" h-3 border-0 rounded" :class="agendaColors[a.agendaPoint]"
-                                    :title="a.agendaPoint">
+                                <hr v-for="a in agenda" :style="{ width: a.time + 'px' }" class=" h-3 border-0 rounded"
+                                    :class="agendaColors[a.agendaPoint]" :title="a.agendaPoint">
                             </div>
 
                             <div :style="{ width: hrWidth + 'px' }" class="flex flex-row flex-nowrap mb-2">
-                                <hr v-if="isOffset()" :style="{ width: speakers[0].start + 'px' }"
+                                <!-- <hr v-if="isOffset()" :style="{ width: speakers[0].start + 'px' }"
+                                    class=" h-3 border-0 rounded bg-transparent"> -->
+                                <!-- TMP hot fix! should be the above commented loc -->
+                                    <hr :style="{ width: 35 + 'px' }"
                                     class=" h-3 border-0 rounded bg-transparent">
                                 <hr v-for="s in speakers" :style="{ width: s.end-s.start + 'px' }"
                                     class=" h-3 border-0 rounded" :class="speakerColors[s.speaker]" :title="s.name">
@@ -302,7 +305,8 @@ async function downloadInfo() {
                         </div>
                     </div>
 
-                    <SearchVideo v-if="speakers.length>0" :speakers="speakers" :agenda="agenda" class="my-4"></SearchVideo>
+                    <SearchVideo v-if="speakers.length>0" :speakers="speakers" :agenda="agenda" class="my-4">
+                    </SearchVideo>
                 </div>
 
             </div>
