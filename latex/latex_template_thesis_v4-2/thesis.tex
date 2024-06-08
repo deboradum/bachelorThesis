@@ -394,10 +394,10 @@ The main requirements for this project was that the model needs to be lightweigh
 
 In the end I chose sentence-transformers/all-mpnet-base-v2. Its small size, its small size of only 109 million and multilingual capabilities make it the perfect model for this task.
 
-\subsection{Agenda points}
+\subsection{Agenda points}\label{sec:agendapoints}
 Some of the meetings already have agenda points provided by the archiving host. For the meetings where this is not the case, a custom agenda point generator that utilizes LLMs has been written.
 
-First, the transcript of a meeting is fed in to an LLM with the task to give the most important subjects of the meeting. 
+First, the transcript of a meeting is fed into an LLM with the task to give the most important subjects of the meeting. 
 Next, for each subject, the LLM is given the task to figure out when the agenda point starts in the meeting. This is done using a sliding window over the transcript. A couple sentences at a time, along with their starting time, are added to the input, after which the LLM will return either true or false depending on if the agenda point starts at the correct time.
 
 \section{Retrieval}
@@ -472,11 +472,11 @@ The transcript and diarisation information together are used to create a turnObj
 
 
 \section{Video analysis}
-Answering the research question \textit{what state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances}? involves evaluating the two utilized analysis tools: Whisper and pyannote.
+Answering the research question \textit{what state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances}? involves evaluating the two utilized analysis tools in the created analysis pipeline: Whisper and pyannote.
 \subsection{Whisper}
 The Word Error Rate (WER) (equation \ref{eq:wer}) is a standard metric to evaluate ASR systems. 
 
-To evaluate Whisper's performance on the scraped meetings, I manually transcribed 30 minutes of meetings, selected randomly from five different meetings. To account for structural- and unimportant transcription differences, a normalisation is applied to both the reference and the hypothesis text. 
+To evaluate Whisper's performance on the scraped meetings, I manually transcribed 40 minutes of meetings, selected randomly from seven different meetings. To account for structural- and unimportant transcription differences, a normalisation is applied to both the reference and the hypothesis text. 
 This normalisation removes all non-alphabetical characters and converts all text to lowercase. 
 
 \begin{figure}
@@ -485,6 +485,10 @@ This normalisation removes all non-alphabetical characters and converts all text
     \caption{Whisper transcription results}
     \label{fig:whisperExperiment}
 \end{figure}
+
+as can be seen from figure \ref{fig:whisperExperiment}, the transcription WER in regular meetings is in line with what can be expected from the Whisper benchmarks presented in \cite{radford2023robust} (illustrated in figure \ref{fig:whisperwer}).
+One interesting observation is the large difference between Zoom meetings and regular meetings. For a couple years during the nationwide COVID regulations, the municipality meetings took place online. During these meetings, every participant used their own device and microphone, a general lower audio quality, with large quality differences between different speakers. 
+
 
 \subsection{Pyannote}
 As described in section \ref{sec:pyannote}, speaker diarisation is scored based on the Diarisation Error Rate (DER). At the time of writing, pyannote.audio offers the best performing speaker diarisation, as shown in figure \ref{fig:pyanres}. 
@@ -496,15 +500,21 @@ A collar is a margin of time around each speaker turn boundary. A 250 millisecon
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.85\textwidth]{images/pyannoteBench.png}
+    \includegraphics[width=0.89\textwidth]{images/error_rates_box_plots.png}
     \caption{pyannote speaker diarisation results}
     \label{fig:pyanExperiment}
 \end{figure}
 
-\subsection{Agenda points}
-As it tuned out, some meetings already had their agenda points public and labeled. I used these known agenda points to test the video segmentation script, thus answering the research question \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}?
+Comparing figure \ref{fig:pyanExperiment} to the benchmark results in figure\ref{fig:pyanres}, some interesting observations can be made. 
+Firstly, the measured Confusion rate is significantly lower than in the official benchmarks. Additionally, the average Miss- and False Alarm rates are roughly equivalent to those in the benchmark results. However, my application exhibits a few high outliers, predominantly originating from Zoom meetings. These outliers, as discussed in the previous section, are introduced by the same drawbacks associated with the online meeting environment.
+Finally, the DER, combining all previous mentioned metrics, is again fairly similar to the official benchmarks, even including the Zoom outliers. 
+For all evaluated metrics, the median values are either comparable to- or notably lower than those in the official benchmarks. Indicating a strong general performance.
+% TODO Mention that the good/ better results miught be explained by the general format of the meetings: There is not much overlapping speech and proffesional microphones are used. (except for the zoom meeings, where there is more overlapping speech due to lag and worse microphones)
 
-I ran the script on 10 different meetings, using their provided agenda points as a ground truth. Next, I counted the number of missed agenda points, the number of false agenda points and how far from the true starting point the LLM estimated the agenda points to be.
+\subsection{Agenda points}
+Using the agenda points provided by some meetings as a ground truth, I tested the video segmentation script described in section \ref{sec:agendapoints}, answering the research question \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}?
+
+I ran the script on 10 different meetings, using their provided agenda points as a ground truth. Next, I counted the number of missed agenda points and the number of false agenda points.
 
 \begin{figure}
     \centering
@@ -513,12 +523,10 @@ I ran the script on 10 different meetings, using their provided agenda points as
     \label{fig:agendaSegmResults}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.85\textwidth]{}
-    \caption{Agenda points timing results}
-    \label{fig:agendaTimeResults}
-\end{figure}
+The disappointing results from figure \ref{fig:agendaSegmResults} indicate that the developed method of automatic topic segmentation in these types of government meetings is not sufficient yet. 
+Besides the uninspiring accuracy results, there are some other hurdles preventing topic segmentation from succeeding. One is the limited context window described in section \ref{sec:agendapoints}. 
+Second is the sliding window approach used. Long meetings easily contain several thousand spoken sentences, all of which need to be fed to the LLM separately. Even with heavy optimization such as combining sentences, a single video can easily take multiple hours to process.
+
 
 \section{Search engine}
 To Answer the main research question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? and the subquestion \textit{how well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed}?, I gathered 20 participants and tasked them to find the answer to five questions using five different search methods.
@@ -545,7 +553,7 @@ The questions were:
 
 % TODO: grafieken en data parsen en hierin zetten!
 
-\chapter{Discussion}
+\chapter{Conclusion}
 % TODO vertellen dat de cross video speaker recognition aardig werkt (nog kwantificeren hoe goed pr3ecies), alleen bij de corona online meetings werkte het een stuk minder geod, vanwege de irreguliere mics en de hoge gain. Dit betekent dus dat de spreker herkenning gelinkt is aan de (type) mic
 
 % Vertellen dat bij zoom meetings de gain hoger is, waardoor pyannote kleinere fragmenten maakt. Vertellen dat dit niet zozeer een lagere kwaliteit segmentation maakt, maar irregulier vergeleken met een 'normale' meeting die niet op zoom is
