@@ -10,7 +10,7 @@
 \addbibresource{references.bib}
 
 % Title Page
-\title{Improving government transparency with a video search engine}
+\title{Improving government transparency with a searchable video archive}
 \author{Pepijn van Wijk}
 \supervisors{Dr. Maarten Marx}
 \signedby{Signees}
@@ -31,7 +31,7 @@ This law is applicable to all governmental bodies, from the house of representat
 Various online tools such as the official Woo-index \footnote{https://organisaties.overheid.nl/woo} and Woogle \footnote{https://woogle.wooverheid.nl} offer the ability to search through a wide range of uploaded documents and information. 
 Though millions of documents are already publishes and searchable, the searchability of one important type of information is lacking; the meetings. Decisions, from large to small, are made during long meetings that are livestreamed and archived. These video archives, often three to four hours, not only require vast amounts of storage, they are also difficult to comb through. 
 Imagine a journalist writing an article about a new piece of legislation that was, among other things, debated the night before by the local municipality. They want to write what the different parties think of the bill and how they voted. Currently, they would have to watch or skip through to video until they find the part where they talk about the proposed law. Then, they would have to watch the debate and take notes on what each Representative argued, along with their arguments.  Understandably, this simple sounding process quickly becomes both time consuming and inefficient. 
-
+\\ \\
 This research provides a solution to this issue by answering the question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? In order to land at a satisfying answer to this research question, some related questions need to be answered first. 
 First, the video archives need to be obtained. This means that the first part of this research will be finding an answer to the question \textit{what are the different archive formats local authorities host in order to comply with the Woo and how are these formats exploited to retrieve as much information as possible}?
 To extract as much relevant information from the video archives, the question \textit{what state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances}? needs to be answered. During the aforementioned hour long meetings, many different subjects are discussed. By answering the question \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}?, this fact can be used to provide a better overview of the video, as well as enhancing searchability. Finally, an answer to the question \textit{what state-of-the-art information retrieval techniques can be leveraged to develop an efficient video information retrieval system}? should be found, tying everything together.
@@ -261,8 +261,8 @@ Pyannote diarisation outputs are formatted according to the Rich Transcription T
     \label{fig:pyanres}
 \end{figure}
 
-\subsection{Topic segmentation}
-\lipsum[4]
+% \subsection{Topic segmentation}
+% \lipsum[4]
 
 \section{Retrieval Augmented Generation}
 Large Language Models (LLMs) store vast amounts of factual information within their parameters. For certain knowledge intensive queries or queries that require proprietary information not included in the training data, an LLM's knowledge recalling abilities are not enough. These situations require external information provided in the prompt that the LLM can use to give a complete and accurate answer \cite{NEURIPS2020_6b493230}. Retrieval Augmented Generation (RAG) is the process of enhancing the LLM's question answering capabilities by finding relevant context and documents and providing these to the LLM in the prompt. The LLM will then use the provided information to answer the user's question more accurate and with less hallucinations.
@@ -457,7 +457,7 @@ Before a municipality can be added to the archive, all meetings have to be downl
     \label{fig:pipeline}
 \end{figure}
 
-The two most important analysis scripts are \textit{transcribe} and \textit{diarise}. These script run Whisper and pyannote respectively, and create a file containing the transcript and diarisation. data. the diarisation data is then used to create a diarisationObject, a JSON file containing the voice profile embedding of each speaker and when they are speaking. Also, a speakerSheet is created. This is and Excel file that an administrator should fill in manually. It maps a detected speaker to a given name, allowing speaker recognition including names. Keep in mind that this should only be done once. Annotated speakers will also be available for videos that were not annotated.
+The two most important analysis scripts are \textit{transcribe} and \textit{diarise}. These script run Whisper and pyannote respectively, and create a file containing the transcript and diarisation. data. the diarisation data is then used to create a diarisationObject, a JSON file containing the voice profile embedding of each speaker and when they are speaking. Also, a speakerSheet is created. This is and Excel file that an administrator should fill in manually. It maps a detected speaker to a given name, allowing speaker recognition including names. Annotated speakers will also be available for videos that were not annotated, meaning that manual speaker labeling only has to be done a single time per speaker.
 
 The transcript and diarisation information together are used to create a turnObject. This is a JSON file that contains text of each speaking turn for each speaker and the textual embedding. When this file is created it is combined with the diarisationObject in order to create the final objects that will be added to Weaviate.
 
@@ -471,9 +471,9 @@ The transcript and diarisation information together are used to create a turnObj
 % Schrijven over time out times enzo van selenium om niet te vroeg element not found + subsequent crash te krijen?
 
 
-\section{Video analysis}
+\section{Video analysis}\label{sec:vidanalysisExp}
 Answering the research question \textit{what state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances}? involves evaluating the two utilized analysis tools in the created analysis pipeline: Whisper and pyannote.
-\subsection{Whisper}
+\subsection{Whisper}\label{sec:whisperExp}
 The Word Error Rate (WER) (equation \ref{eq:wer}) is a standard metric to evaluate ASR systems. 
 
 To evaluate Whisper's performance on the scraped meetings, I manually transcribed 40 minutes of meetings, selected randomly from seven different meetings. To account for structural- and unimportant transcription differences, a normalisation is applied to both the reference and the hypothesis text. 
@@ -487,10 +487,10 @@ This normalisation removes all non-alphabetical characters and converts all text
 \end{figure}
 
 as can be seen from figure \ref{fig:whisperExperiment}, the transcription WER in regular meetings is in line with what can be expected from the Whisper benchmarks presented in \cite{radford2023robust} (illustrated in figure \ref{fig:whisperwer}).
-One interesting observation is the large difference between Zoom meetings and regular meetings. For a couple years during the nationwide COVID regulations, the municipality meetings took place online. During these meetings, every participant used their own device and microphone, a general lower audio quality, with large quality differences between different speakers. 
+One interesting observation is the large difference between Zoom meetings and regular meetings. For a couple years during the nationwide COVID regulations, the municipality meetings took place online. During these meetings, every participant used their own device and microphone, a general lower audio quality, with large quality differences between different speakers.
 
 
-\subsection{Pyannote}
+\subsection{Pyannote}\label{sec:pyanExp}
 As described in section \ref{sec:pyannote}, speaker diarisation is scored based on the Diarisation Error Rate (DER). At the time of writing, pyannote.audio offers the best performing speaker diarisation, as shown in figure \ref{fig:pyanres}. 
 
 To test how well pyannote performs on the municipality dataset, I manually annotated 30 random minutes of meetings, distributed over five different meetings. I used audio tool Audacity to obtain millisecond-accurate timestamps. During manual diarisation, speakers were named arbitrarily. After diarisation, the manual speaker names were mapped to the speaker names given by pyannote to make sure the confusion rate metric can be performed.
@@ -518,7 +518,7 @@ I ran the script on 10 different meetings, using their provided agenda points as
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.85\textwidth]{}
+    \includegraphics[width=0.85\textwidth]{images/topicSegmentation.png}
     \caption{Agenda point segmentation results}
     \label{fig:agendaSegmResults}
 \end{figure}
@@ -551,15 +551,24 @@ The questions were:
     \item Wat is het doel van het voorstel met betrekking tot de gemeenschappelijke regeling van de bedrijfsvoeringspartner?
 \end{enumerate}
 
+a
 % TODO: grafieken en data parsen en hierin zetten!
 
 \chapter{Conclusion}
+Looking back at the main research question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? It can be concluded from figure \ref{} that a strong and user friendly system of information retrievability has been developed, as indicated by the significantly quicker retrieval times. 
+
+This has been achieved by making use of a custom written Whisper ASR and pyannote.audio speaker diarisation pipeline. In this pipeline, videos are transcribed and diarised, after which they are embedded and inserted in a Weaviate vector database. Both video analysis tool implementations and the Weaviate are measured to perform either on par with- or better than the current state-of-the-art benchmark evaluations, answering the research question \textit{what state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances}? and \textit{what state-of-the-art information retrieval techniques can be leveraged to develop an efficient video information retrieval system}?.
+
+The research question topic segmentation research question, \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}? did not receive an answer as positive as the previous research questions. It turned out that several contemporary complications, namely context window and compute power, hindered the development of creating an accurate topic segmentation system usable in governmental meeting archives.
+
+Finally, a chat bot system with access to the Weaviate database allows the user to ask questions regarding specific meetings in a conversational style. As shown in figure \ref{}, this chat bot scores ....., indicating that .....
+
+% Ik denk dat ik hier nog iets wil over een toekomstig onderzoek waar nog meer naar gekeken kan worden? IDK
+
 % TODO vertellen dat de cross video speaker recognition aardig werkt (nog kwantificeren hoe goed pr3ecies), alleen bij de corona online meetings werkte het een stuk minder geod, vanwege de irreguliere mics en de hoge gain. Dit betekent dus dat de spreker herkenning gelinkt is aan de (type) mic
 
-% Vertellen dat bij zoom meetings de gain hoger is, waardoor pyannote kleinere fragmenten maakt. Vertellen dat dit niet zozeer een lagere kwaliteit segmentation maakt, maar irregulier vergeleken met een 'normale' meeting die niet op zoom is
-% Ook een afbeelding toevoegen van de verschillende gains die het aantoont
+% Ook een afbeelding toevoegen van de verschillende gains in zoom meetings en geen zoom meetings die dat aantoont
 
-% Zeggen dat met whisper de meeste fouten komen door gemompel, wat whisper automatisch eruit filtert (uhh en gemompel dat later duidelijk wordt uitgesproken maar dat heb ik wel uitgeschreven)
 
 \printbibliography
 
