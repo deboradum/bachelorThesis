@@ -7,10 +7,12 @@
 
 % Citations
 \usepackage[style=numeric]{biblatex}
+\usepackage[switch, modulo]{lineno}
+\linenumbers
 \addbibresource{references.bib}
 
 % Title Page
-\title{Improving government transparency with a searchable video archive}
+\title{AI-Driven Retrieval and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, and Retrieval-Augmented Generation}
 \author{Pepijn van Wijk}
 \supervisors{Dr. Maarten Marx}
 \signedby{Signees}
@@ -19,7 +21,9 @@
 \maketitle
 
 \begin{abstract}
-\lipsum[2]
+The accessibility of governmental discussion meetings is fundamental to a healthy democracy, yet current methods for retrieving information from video archives, particularly those of democratically elected councils, are inefficient and time-consuming. This research addresses this issue by leveraging AI to enhance information retrievability from large video archives. By employing state-of-the-art video and audio analysis tools, including a custom Whisper ASR and pyannote.audio speaker diarisation pipeline, videos are transcribed, diarised, and embedded into a Weaviate vector database. 
+Archived meetings can subsequently be queried in three different ways: a semantic-based approach utilizing nearest-vector search, a lexical approach employing BM25 ranked keyword search, and a hybrid approach that permits a custom weighted combination of both semantic and lexical search techniques.
+These tools significantly improve searchability, as evidenced by the developed system's quicker retrieval times. On top of this, the integration of a chat bot system with access to the Weaviate database offers a conversational interface for querying specific meetings. Overall, this research contributes to enhancing transparency and accessibility in governmental proceedings through AI-driven advancements in information retrieval from video archives.
 \end{abstract}
 
 \tableofcontents
@@ -38,11 +42,11 @@ To extract as much relevant information from the video archives, the question \t
 On top of these base questions, the last part of this research regards an integration of the search system with a large language model, answering the final sub question \textit{how well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed}?
 
 \chapter{Related work}
-The act of archiving and transcribing parliamentary meetings is not new. Most big governmental organisations such as the European Parlement and the Dutch House of Representatives host an online archive that offers an elementary search mechanism. 
+The act of archiving and transcribing parliamentary meetings is not new. Most big governmental organisations such as the European Parlemen \footnote{https://www.europarl.europa.eu/plenary/nl/debates-video.html} and the Dutch House of Representatives \footnote{https://debatdirect.tweedekamer.nl/} host an online archive that offers an elementary search mechanism. 
 These online archives offer a pleasant viewing experience, showing the current speaker and what is being said. Most of the time, the active speaker is not automatically detected, but the information is taken from the currently active microphone, which is linked to a person. Occasionally, this results in an incorrect speaker being highlighted when the speaker speaks through a different microphone than they were assigned.
 On top of this, the search functionalities that these existing archives offer is often limited to a naive keyword search comparable to a control+f search, or they offer no searching at all.
 
-Some proprietary tools provide users the ability to search specifically through (AI generated) meeting notes. The main purpose of these tools generally is the generation of notes, not the searching. As a result, the search mechanism is a simple keyword search, showing all text snippets containing the given query. 
+Some proprietary tools such as fireflies \footnote{https://fireflies.ai/} and tactiq \footnote{https://tactiq.io/} provide users the ability to search specifically through (AI generated) meeting notes. The main purpose of these tools generally is the generation of notes, not the searching. As a result, the search mechanism is a simple keyword search, showing all text snippets containing the given query. 
 
 Stepping away from searching through meeting video archives,previous studies have explored the searching of video archives containing online lectures. The majority of these studies use a combination of transcripts and optical character recognition (OCR) obtain relevant search results, leveraging the fact that on-screen text has a high probability of being relevant to the discussed subject \cite{Adcock10, yang14}. 
 Unfortunately, this approach won't work for searching through parliamentary meetings since these meetings held without an accompanying screen that is showing information. 
@@ -54,7 +58,7 @@ Natural Language Processing (NLP) is the field in computer science primarily foc
 
 % Natural language processing is widely used in everyday life. Whenever you see a foreign article on the internet and use the translate feature to translate this text to English for example. Or, blabla bla bla...
 
-Natural language processing has its historical roots roughly halfway of the previous century. During this time, early experiments were performed trying to create computer chat bots and to automatically translate foreign languages. From the 1950's onwards, an approach that is now called 'symbolic NLP' was used. Symbolic NLP is similar to the way humans learn to understand languages: using a set of handcrafted rules, structures, patterns and decision trees, a framework for the understanding and generation of a language is created. The machine then follows this set of rules to determine the desired output \cite{Dale00}. One example of this symbolic NLP approach is the ELIZA computer program, dating back to 1964. ELIZA was developed by Joseph Weizenbaum at MIT. ELIZA analyzes input sentences by applying a set of generated decomposition rules and key word detection \cite{weizenbaum66} \cite{Jurafsky08}. A response is then generated by a rule set focused on mimicking Rogerian psychotherapy responses \footnote{For more information, see Yao, 2023. \cite{Yao23}}. 
+Natural language processing has its historical roots roughly halfway of the previous century. During this time, early experiments were performed trying to create computer chat bots and to automatically translate foreign languages. From the 1950's onwards, an approach that is now called 'symbolic NLP' was used. Symbolic NLP is similar to the way humans learn to understand languages: using a set of handcrafted rules, structures, patterns and decision trees, a framework for the understanding and generation of a language is created. The machine then follows this set of rules to determine the desired output \cite{Dale00}. One example of this symbolic NLP approach is the ELIZA computer program, dating back to 1964. ELIZA was developed by Joseph Weizenbaum at MIT. ELIZA analyzes input sentences by applying a set of generated decomposition rules and key word detection \cite{weizenbaum66} \cite{Jurafsky08}. A response is then generated by a rule set focused on mimicking Rogerian psychotherapy responses \cite{Yao23}. 
 
 \begin{figure}[h]
     \begin{verbatim}
@@ -97,7 +101,7 @@ As briefly described in the previous section, current state-of-the-art NLP techn
     \label{fig:embeddings}
 \end{figure}
 
-Interestingly, these vector representations contain an embedded meaning of the word. As stated before, semantically similar words are embedded close to each other in the vector space, a schematic, 2D representation of this phenomenon is illustrated in figure \ref{fig:embeddings}. Besides this locality, word vectors also contain relationships to other words, as learned from the context provided by the dataset. Perhaps the most famous example of this was found by one of the authors of Word2vec, several years earlier \cite{mikolov13_2}. This paper showed that when the vector representing 'Man' ($V('man')$) was deducted from $V('king')$, the result of which added to the vector $V('woman')$, results in a vector closest to the word 'Queen'. Later, the Word2vec paper presented several other examples showing the capabilities of 'word vector arithmetic', as seen in figure \ref{fig:vecarith}.
+remarkably, these vector representations contain an embedded meaning of the word. As stated before, semantically similar words are embedded close to each other in the vector space, a schematic, 2D representation of this phenomenon is illustrated in figure \ref{fig:embeddings}. Besides this locality, word vectors also contain relationships to other words, as learned from the context provided by the dataset. Perhaps the most famous example of this was found by one of the authors of Word2vec, several years earlier \cite{mikolov13_2}. This paper showed that when the vector representing 'Man' ($V('man')$) was deducted from $V('king')$, the result of which added to the vector $V('woman')$, results in a vector closest to the word 'Queen'. Later, the Word2vec paper presented several other examples showing the capabilities of 'word vector arithmetic', as seen in figure \ref{fig:vecarith}.
 \begin{figure}[h]
     \centering
     $$V('copper') - V('Cu') + V('zinc') \approx V('Zn')$$
@@ -171,7 +175,7 @@ These remarkable results are achieved by the use of approximate nearest neighbor
 One of the most employed ANN algorithms is Hierarchical Navigable Small World graphs (HNSW) \cite{malkov2018efficient}. This proximity graph based algorithm is TODO
 
 \subsubsection{Hybrid search}
-Many vector databases allow for a combination between ANN powered vector similarity search and probabilistic searches. todo balblalba...
+Many vector databases allow for a combination between ANN powered vector similarity search and probabilistic searches. TODO
 
 
 \section{Video \& audio analysis}
@@ -193,7 +197,7 @@ One of the very first systems systems capable of recognizing speech was develope
 
 From the late seventies onwards, a focus on statistical approaches gained traction in favor of the previously used pattern recognition methods. With the use of recently formulated Markov chains and hidden Markov models, subsequent systems rapidly grew to a vocabulary of a thousand word, which was later broken by IBM's Tangora system, capable of recognizing over 20,000 words. \cite{Juang05}
 
-One particularly large milestone was the Sphinx-II system, developed in 1992 by, among others, Xuedong Huang at Carnegie Mellon University. Sphinx-II, using an advanced statistical approach, was the first system that had both a large vocabulary, and the ability to perform speaker-independent detection. The Sphinx-II also won DARPA's speech benchmark evaluation in 1992. ASR systems are mainly evaluated by their Word Error Rate (WER) (equation \ref{eq:wer}). Sphinx-II only suffered from a fairly low error rate of 5\% \cite{huang1993overview, huang2014historical}.
+One particularly large milestone was the Sphinx-II system, developed in 1992 by, among others, Xuedong Huang at Carnegie Mellon University. Sphinx-II, using an advanced statistical approach, was the first system that had both a large vocabulary, and the ability to perform speaker-independent detection. The Sphinx-II also won DARPA's speech benchmark evaluation in 1992. ASR systems are mainly evaluated by their Word Error Rate (WER) (equation \ref{eq:wer}) \cite{huang1993overview, huang2014historical}.
 
 \begin{equation} \label{eq:wer}
     WER = \frac{S + D + I}{S + D + C}
@@ -208,7 +212,7 @@ where: \\
 
 Up until the late 2000's, the use of hidden Markov models and similar statistical methods still dominated in the ASR space. However, with the advent of deep neural networks (DNNs) and the aforementioned transformer architecture, the paradigm has shifted yet again, bringing light the the current state-of-the-art: OpenAI's Whisper ASR.
 
-\subsubsection{Whisper}
+\subsubsection{Whisper}\label{sec:whisper}
 In 2022, OpenAI released Whisper, capable of 'Robust Speech Recognition via Large-Scale Weak Supervision' \cite{radford2023robust}. Trained on 563,000 hours of labeled English speech, and 117,000 hours of labeled speech in 96 different languages, Whisper is the current state-of-the-art ASR system, with a (post normalisation) word error rate that is similar to a professional human transcriber, as seen in figure \ref{fig:whisperwer}.
 Whisper makes use of an encode-decoder Transformer, as described in \cite{vaswani17}. Input audio is first resampled and standardized, after which it is converted to a Mel Spectrogram, normalized and fed in to the network. A full view of the simplified architecture can be seen in figure \ref{fig:whisperarch}.
 
@@ -242,8 +246,11 @@ Central to speaker diarisation is voice profile feature extraction. When a relia
 \subsection{Pyannote}\label{sec:pyannote}
  Pyannote.audio (pyannote) is the current state-of-the-art speaker diarisation mode. It is not only a speaker diarisation model, but it also offers a range of speaker diarisation sub-modules. These submodules include voice activity detection, overlapped detection speech, speaker change detection, and more. \cite{bredin2020pyannote, bredin2023pyannote}
 
-In most competitions, speaker diarisation accuracy is graded by four criteria: speaker confusion rate (CONF), which is the duration of speaking where the speaker is mislabeled, false alarm rate, which is the duration of non-speech incorrectly classified as speech, missed detection, which is the duration of speech that is incorrectly classified as non-speech and Diarisation Error Rate (DER), which is the sum of these three. As can be seen from figure \ref{fig:pyanres}, pyannote scores at the top of most benchmarks. Top benchmarks are greatly improved by their preview baseline, while DERs on benchmarks where pyannote does not score at the top are fairly close, indicating a great overall performance. \cite{bredin2023pyannote}
+In most competitions, speaker diarisation accuracy is graded by four criteria: speaker confusion rate (CONF), which is the duration of speaking where the speaker is mislabeled, false alarm rate (FALSE), which is the duration of non-speech incorrectly classified as speech, missed detection (MISS), which is the duration of speech that is incorrectly classified as non-speech and Diarisation Error Rate (DER), which is a combination of the first three. As can be seen from figure \ref{fig:pyanres}, pyannote scores at the top of most benchmarks. Top benchmarks are greatly improved by their preview baseline, while DERs on benchmarks where pyannote does not score at the top are fairly close, indicating a great overall performance. \cite{bredin2023pyannote}
 
+\begin{equation}
+    DER = \frac{FALSE + CONF + MISS}{ground \; truth \; duration}
+\end{equation}
 
 The pyannote system uses the following distinct steps on five seconds sliding windows of audio \cite{bredin2023pyannote}: 
 \begin{enumerate}
@@ -277,55 +284,49 @@ The retrieval of the relevant context is mostly done by the use of a dense vecto
 \end{figure}
 
 
-\chapter{My work}
+\chapter{Methods}
 \section{Crawler}
-Before any analysis work can begin, the first sub research question \textit{what are the different archive formats local authorities host in order to comply with the Woo and how are these formats exploited to retrieve as much information as possible?} needs to be answered. 
+Before starting any analysis work, the first sub research question \textit{what are the different archive formats local authorities host in order to comply with the Woo and how are these formats exploited to retrieve as much information as possible?} needs to be answered.
 
-An overwhelming amount of Dutch local municipalities are allied with one of two service providers that provide archiving, hosting and indexing of past meetings. These two service providers are \href{https://www.ibabs.com}{iBabs} and \href{https://www.notubiz.nl/}{NotuBiz}. Notubiz alone serves over 250 local municipalities, provinces and water authorities, while iBabs serves another TODO. 
+An overwhelming amount of Dutch municipalities are allied with one of two service providers that archive, host and index past council meetings. These two service providers are \href{https://www.ibabs.com}{iBabs} and \href{https://www.notubiz.nl/}{NotuBiz}. NotuBiz alone serves over 250 local municipalities, provinces and water authorities, while iBabs serves several hundred more. 
 
-Thus, in order to create a service that is compatible with most Dutch (local) government instances, a tool must be developed that is capable of extracting the meetings from at least these two hosting services.
+Thus, in order to create a service compatible with most Dutch governmental bodies, a tool must be developed that is capable of extracting meetings from at least these two hosting services.
 
 \subsubsection{NotuBiz}
-NotuBiz serves many local municipalities in an easy to scrape format. Municipalities have the option to host meetings of different categories and NotuBiz allows for a search to be performed on many different objects such as meeting points, documents, years and meeting types. 
+NotuBiz serves many municipalities in an easy to scrape, static format. Municipalities have the option to host meetings of different categories and NotuBiz allows for a search to be performed on many different objects such as meeting points, documents, years and meeting types.
+When searching for a specific meeting type, NotuBiz sends a GET request to a remote server. By sniffing the network upon making such a search request, I identified the endpoint used for meeting searches and its necessary parameters. 
+The important parameters are \textit{keywords}, meaning the meeting type, and \textit{organisations}. 
+This organisations parameter is quite cumbersome, since it is a municipality specific code used to specify the municipality to be searched. The only way to retrieve this is to make a search request on the desired NotuBiz website and to sniff the network. 
 
-NotuBiz fetches these search results from their server using a GET request. By sniffing the network upon making a search request, I managed to find the endpoint used for search and its necessary parameters. The important keywords are \textit{keywords}, meaning the meeting type, and the \textit{organisations} filter. This organisations filter is especially cumbersome, since it is a municipality specific code used to specify the municipality to be searched. The only way to retrieve this is to make a search request on the desired NotuBiz website and to sniff the network using a dev tool inspector. 
-
-I have created a Python Jupyter Notebook that can scrape any NotuBiz archive with minimal user input needed. Simply the municipality name, the download location, the NotuBiz url, the desired meeting type, the aforementioned unique municipality code and the desired years that the meetings were held. 
-The notebook will then find all meetings using Python's Beautiful Soup, writing the meeting page links to a file. When all meeting links are found, they are parsed by Beautiful Soup. When a download link has been found on the page, the video will be downloaded and saved at the appropriate location.
+I have created a scrape script in a Python Jupyter Notebook that can scrape any NotuBiz archive with minimal user input needed. The user must simply provide the municipality name, the download location, the base NotuBiz URL, the desired meeting types and years and the unique municipality code mentioned earlier. 
+The script will then find all meetings using Python's Beautiful Soup library, writing the meeting page links to a file. When all meeting links are found, the webpages are parsed to look for the remote URL where the video is hosted. When this link has been found on the page, the video will be downloaded and saved at the location specified earlier.
 
 \subsubsection{iBabs}
-Municipalities utilizing iBabs for their hosting categorize their meetings into various distinct classifications, which are subsequently subdivided by year.
-Each category is listed at the URL 'https://$<$municipality$>$.bestuurlijkeinformatie.nl/Calendar', as seen in figure \ref{fig:ibabsCats}. When a category is chosen, a similar screen allows the user to further specify the year and video.
+Unlike NotuBiz, iBabs is a dynamically loaded site, meaning data gets loaded in and out of the browser in real-time as users interact with the site. One positive result of this approach is that it enables more responsive and interactive user experiences, as the web page (DOM) can update content without requiring a full page reload. A negative effect is that it makes it more difficult to scrape the webpage for its information and videos with simple scraping tools.
+In addition to this fact, iBabs also uses a specific file format for their video archives, M3U. M3U is not a video file, it is a text file that specifies the locations of parts of a video or audio file hosted on a remote server, allowing for more efficient streaming. 
+Unlike NotuBiz, where the video link is statically present in the web page, the M3U file on iBabs is only fetched from the server when the user clicks the \textit{play video} button. 
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.95\textwidth]{images/ibabsCats.png}
-    \caption{Nijmegen iBabs categories}
-    \label{fig:ibabsCats}
-\end{figure}
+Both these complications mean that static scraping tools and HTML parsers such as Python's urllib and Beautiful Soup are not equipped to deal with iBabs. To solve these issues, I used Selenium Web Driver. Selenium is an automatable web browser that can be programmed to interact with the DOM and parse web pages. Selenium can also be used to sniff the browser's network for the M3U URL that is fetched from the iBabs servers when the \textit{play video} button is clicked. 
 
-Unlike NotuBiz, iBabs is a dynamically loaded website, meaning data gets loaded in and out of the browser in real-time as users interact with the site. One positive result of this approach is that it enables more responsive and interactive user experiences, as the web page (DOM) can update content without requiring a full page reload. A negative effect is that it makes it more difficult to scrape the webpage for its information and videos.
-In addition to this fact, iBabs also uses a specific file format for their video archives, M3U. M3U is not a video file. It is a text file that specifies the locations of parts of a video or audio file hosted on a remote server, allowing for more efficient streaming. This M3U file is only fetched from the server when the user clicks the \textit{play video} button. 
+Similar to NotuBiz, I have written a generic iBabs Jupyter Notebook scraper. The user only has to specify the municipality name, the download location and which years should be retrieved. 
+The tool will then fetch all categories that are listen on the home page using Beautiful Soup, creating directories for the municipality, its categories and for each category the different years in the process.
+Next it will use Beautiful Soup to get links to all pages hosting different videos and writes these links URLs to a file containing all meeting webpage URLs. 
+When all video pages have been scraped, Selenium is used to open each page, find and click the \textit{play video} button. After this, the browser network is sniffed for the fetched M3U file link which is written to the another file.
 
-Both these complications mean that static scraping tools and HTML parsers such as Python's urllib and Beautiful Soup are not equipped to deal with the necessities that iBabs requires. To solve these issues, Selenium Web Driver is used. Selenium is an automatable web browser that can be programmed to interact with the DOM, and parse the current web pages. Selenium is also used to sniff the browser's network for the M3U URL that is fetched from the iBabs servers when the \textit{play video} button is clicked. 
-
-I have also written a generic iBabs scraper in the form of a Python Jupyter Notebook. The user only has to specify the municipality name, as seen in the host URL \\ 'https://$<$municipality$>$.bestuurlijkeinformatie.nl/Calendar' and which years should be retrieved. The tool will then fetch all categories that are listen on the home page using Beautiful Soup, creating directories for the municipality, its categories and for each category the different years in the process. 
-Next it will use Beautiful Soup to get links to all pages hosting different videos and writes these links URLs to a file dataPath/municipality/category/year/vergaderingen.txt. 
-When all video pages have been scraped, Selenium is used to open each page, find and click the \textit{play video} button. After this the browser network is sniffed for the fetched M3U file link which is written to the file dataPath/municipality/category/year/vergaderingenDownloads.txt.
-
-After all M3U URLs have been retrieved, the vergaderingenDownloads.txt file is read and videos are downloaded using a M3U download tool. 
+After all M3U URLs have been retrieved, the file containing the download links is read and videos are downloaded using a M3U download tool \footnote{https://github.com/josephcappadona/m3u8downloader}.
 
 
 \section{Video analysis}
-\subsection{Whisper}
-Machine learning is a constantly changing field that evolves rapidly. Every month, dozens of new models and model architectures are released that are more effective in certain situations. 
-With this in mind, one of the fundamental principles I uphold is that the design of AI model clients must be as modular as possible. 
-This is achieved through the implementation of Python class inheritance. 
+Machine learning is a constantly changing field that evolves rapidly. Every month, dozens of new models and model architectures are released that are more effective in specific niche scenarios. 
+With this in mind, one of the fundamental principles I decided to uphold in the creation of the analysis pipeline, is that the design of the AI clients must be as modular as possible. This is primarily achieved through the implementation of Python class inheritance. 
 
-In the case of ASR, a base Transcriber class is defined, specifying what methods must be implemented. Then, for each new ASR model, a child class is created where only model specific methods are written. For transcribing, the only model specific method that should be implemented is the \textit{transcribe} method. \textit{transibe} should take in an input path and an output path, which will be used to load the audio file and save the transcription. 
+\subsection{Whisper}
+The ASR client, responsible for transcribing downloaded meetings, is implemented with Whisper ASR for reasons explained in section \ref{sec:whisper}.
+As for the ASR client, A base \textit{Transcriber} class specifying what methods must be implemented is defined. Then, for each new ASR model, a child class can be created where only model-specific methods are written. 
+In the case of the ASR client, the only model-specific method that must be implemented is the \textit{transcribe} method. \textit{transcribe} should take in an input path and an output path, which will be used to load the audio file and save the transcription.
 Other methods such as loading transcriptions are model invariant.
 
-As mentioned before, the current state-of-the-art in automatic speech recognition is OpenAI's Whisper. Two Whisper models have been implemented for the final client: one using MLX, a framework allowing fast machine learning on Apple silicon devices, and one using PyTorch. 
+In the current analysis pipeline code, two Whisper models have been implemented: one client using MLX, a Python array framework allowing fast machine learning on Apple silicon devices, and one using PyTorch. 
 
 \begin{lstlisting}[language=Python, caption={Modular transcriber class implemented in Apple's MLX Whisper port and PyTorch's Whisper port.}]
 class Transcriber:
@@ -336,6 +337,7 @@ class Transcriber:
     def load_transcription(self, path):
         # Logic which is not specific to any particular model.
         return transcription
+
 
 class MLX_Transcriber(Transcriber):
     def __init__(self, model):
@@ -354,13 +356,12 @@ class Torch_Transcriber(Transcriber):
         return
 \end{lstlisting}
 
-\subsection{Speaker diarisation}
-The speaker diarisation client is designed following the same principles and methodologies as those employed in the Whisper client. A base class \textit{Diarisor} defining the model dependant methods is declared, which is used as a parent class by model specific classes, in the case of this project, the \textit{Pyannote} class.
+\subsection{pyannote}
+The speaker diarisation client is designed following the same principles and methodologies as those employed in the Whisper client. A base class \textit{Diarisor} defining the model-specific methods is declared, which is used as a parent class by model specific classes, in the case of this project, the \textit{Pyannote} class.
 
-The speaker diarisation client only has two model dependant methods: \textit{diarise} and \textit{embed}. The \textit{diarise} method takes in an input path and an output path, which are used to load the audio and save the generated speaker diarisation output file.
+The speaker diarisation client has two model-dependant methods: \textit{diarise} and \textit{embed}. The \textit{diarise} method takes in an input path and an output path, which are used to load the audio and save the generated speaker diarisation output. The \textit{embed} method takes in an input file and a start- and end time. It will then embed the voice profile of the audio within the specified time frame.
 
 As mentioned in section \ref{sec:pyannote}, pyannote.audio is the current state-of-the-art in the field of speaker segmentation. Because of this, the model used in the final architecture is pyannote.audio V3.2.0, the latest version. In case a new, better model is released, this model can be easily implemented due to the modular design of the client.
-\\\\ % otherwise first line of listing is on this page and the rest on the next page, I did not like that
 
 \begin{lstlisting}[language=Python, caption={Modular speaker diarisation class.}]
 class Diarisor:
@@ -374,7 +375,7 @@ class Diarisor:
 \end{lstlisting}
 
 \subsection{Embedder}
-Just like the previously mentioned clients, the text embedding client used to embed speaking turns is made in a modular manner, allowing different embed models to be used with ease. Practically all sentence embedding models present day are released on HuggingFace, allowing them to be used through a standard method \textit{encode} in the SentenceTransformers framework developed by HuggingFace. This means that only the class initialisation method is model dependant, while the embed method can be model invariant.
+Practically all sentence embedding models present day are released on HuggingFace, making modularisation easy. HuggingFace embed models can be used through a standard method \textit{encode} in the SentenceTransformers framework developed by HuggingFace. This means that only the class initialisation method is model-specific, while the embed method can be model invariant since it is called through the SentenceTransformers API.
 
 \begin{lstlisting}[language=Python, caption={Modular embed class.}]
 class Embedder:
@@ -389,22 +390,24 @@ class Embedder:
         return self.model.encode(text)
 \end{lstlisting}
 
-Choosing the right embedding model for this project was not as easy as looking at the current leaderboard and selecting the best performing model. The reason for this is the large number of embedding models that are each optimised for different niche use cases. 
-The main requirements for this project was that the model needs to be lightweight, quick, and multilingual. Since thousands of hours of video material needs to be embedded, a quick and light model is important. Even more important however, is multilinguality. Multilinguality ensures that semantically similar sentences in different languages will still map close to each other in the vector space. Since most monolingual embedding model are trained on English text, running these models on Dutch sentences will lead to suboptimal performance.
+Choosing the appropriate embedding model for this project is not as simple as looking at the current leaderboard and selecting the top-performing model. The reason for this is the vast array of available embedding models, each optimised for specific niche applications. 
+The primary requirements for this project be lightweight, fast, and multilingual. Given that thousands of hours of video material need to be embedded, a model with low computational demands and rapid processing capabilities is crucial. Even more important however, is the requirement for multilinguality. Multilinguality ensures that semantically similar sentences in different languages will still map close to each other in the vector space. Since most monolingual embedding model are trained on English text, running these models on Dutch sentences will lead to suboptimal performance.
 
-In the end I chose sentence-transformers/all-mpnet-base-v2. Its small size, its small size of only 109 million and multilingual capabilities make it the perfect model for this task.
+In the end I selected the sentence-transformers/all-mpnet-base-v2 model \footnote{https://huggingface.co/sentence-transformers/all-mpnet-base-v2}. Its compact size of only 109 million parameters, coupled with its multilingual capabilities make it the perfect model for this task.
 
 \subsection{Agenda points}\label{sec:agendapoints}
-Some of the meetings already have agenda points provided by the archiving host. For the meetings where this is not the case, a custom agenda point generator that utilizes LLMs has been written.
+For the research question \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}, a agenda point topic segmentation client needs to be written. It should take in the transcript of a meeting, and it should return a list of agenda points and times, specifying when these topics start and end.
 
-First, the transcript of a meeting is fed into an LLM with the task to give the most important subjects of the meeting. 
-Next, for each subject, the LLM is given the task to figure out when the agenda point starts in the meeting. This is done using a sliding window over the transcript. A couple sentences at a time, along with their starting time, are added to the input, after which the LLM will return either true or false depending on if the agenda point starts at the correct time.
+% As it turned out, some of the meetings already have their agenda points provided by the archiving host. For the meetings where this is not the case, a custom agenda point generator that utilizes LLMs has been written.
+
+The concept of topic segmentation is quite simple. First, the transcript of a meeting is fed into an LLM with the task to label the most important topics discussed during the meeting, in chronological order. 
+Next, for each topic, the LLM should figure out when the agenda point starts in the meeting. This is done using a sliding window over the transcript. 
+One by one, sentences, along with their starting time and the current topic, are sent to a LLM. The LLM is then tasked to return either true or false depending on if it thinks the agenda point starts at the current sentence. When this is the case, the topic is considered labeled and the next topic is prompted.
 
 \section{Retrieval}
 \subsection{Weaviate}\label{sec:weaviate}
-Unlike the aforementioned mentioned clients, the Weaviate client is not as modular. One of the reasons for this is that releases of new and better database systems are less common that new models. 
-
-The created Weaviate client has methods for various default operations such as creating and deleting collections (similar to tables in relational databases), inserting and deleting entries and getting collection metadata. Besides these basic operations, three search methods from section \ref{retrievalSection} have been implemented: Vector search, BM25 search and Hybrid search.
+The created Weaviate client allows the user to easily perform default operations such as creating and deleting collections (similar to tables in relational databases), inserting and deleting entries and getting collection metadata. 
+Besides these basic operations, three search methods described in section \ref{retrievalSection} have been implemented: Vector search, BM25 search and Hybrid search.
 
 All search methods allow the user to specify filter parameters such as government, year, speaker and more. Invariant of employed the search method, the client returns data in a uniform format—an array of relevant result objects. Each result object within this array includes properties such as meeting ID, government, year, etc., the result's UUID, its vector representation, and its relevance score.
 
@@ -423,29 +426,22 @@ class LLM:
         return LLMReturnCodes.NOT_IMPLEMENTED
 \end{lstlisting}
 
-\section{Web application}
-To make all previously mentioned functionalities accessible to a user, I created a user friendly front end interface using Vue 3.
+\section{Search engine}
+To make all previously mentioned functionalities accessible to the end user, I developed a user-friendly web application using front-end framework Vue3.
 
-The web app has two main functionalities, the first being a global search. 
-This global search allows the user to search through all available video transcripts. In the case where only a single government, meeting type or year should be searched, selectable filters are present that allow the user to only query specific data.
+The web app offers two primary functionalities. The first is a global search feature, 
+enabling users to search through all available videos for spoken information. For more specific queries, users can apply selectable filters to search by a particular government, meeting type, or year.
 
-The other functionality allows the user to navigate to a specific video through the archive by choosing the government, meeting type and year. When a video is selected, the video is shown and playable. 
-Below the vide,o different speakers and their speaking turns as well as the meeting discussion points and their times are shown. When a speaker or discussion point is clicked, the video is skipped forward to the clicked timestamp. 
-Below the video, a search bar similar to the global search allows the user to search for information in the video. In this video search, both speakers and discussion points can be filtered. 
+The second functionality allows users to navigate the video archive by selecting the government, meeting type, and year. Once a video is selected, it is displayed and can be played. 
+Below the video, the speakers, their speaking turns, and the meeting discussion points with corresponding timestamps are shown. Clicking on a speaker or discussion point advances the video to the relevant timestamp. Additionally, a search bar beneath the video, similar to the global search, permits users to search within the video for specific information. This in-video search also supports filtering by speakers and discussion points.
 
-Next to the video, a LLM powered chat window allows the user to interactively ask questions and information about the video.
+Adjacent to the video, a LLM powered chat window enables users to ask questions and retrieve information related to the video content in a conversational way.
 \begin{figure}
     \centering
     \includegraphics[width=0.9\textwidth]{images/frontend.png}
     \caption{Web application video view}
     \label{fig:frontendVid}
 \end{figure}
-
-
-
-% \section{Architecture overview}
-% Each client described earlier is accessible through a single Python FastAPI server. 
-% On startup, this server instantiates the clients, which are then called by the server when requests to certain endpoints are made.
 
 \subsection{Analysis pipeline}
 Before a municipality can be added to the archive, all meetings have to be downloaded and analysed. A diagram of the analysis pipeline is shown in figure \ref{fig:pipeline}.
@@ -461,14 +457,17 @@ The two most important analysis scripts are \textit{transcribe} and \textit{diar
 
 The transcript and diarisation information together are used to create a turnObject. This is a JSON file that contains text of each speaking turn for each speaker and the textual embedding. When this file is created it is combined with the diarisationObject in order to create the final objects that will be added to Weaviate.
 
+\subsection{Deployability}
+The entire search engine web app, its back-end and the Weaviate vector database are easily deployed using a custom Docker script. In total, over three thousand hours of meetings has been collected and analysed. The raw video files for these meetings alone are over 2 terabytes. Due to this large storage requirement, The docker image does not include the videos, only the extracted information needed by the front-end and Weaviate.
+This necessary information is only 3 gigabytes, which is much more easily distributed.
 
-\chapter{Experiments}
-\section{Crawler}
-% Schrijven over hoeveel procent van de meetings correct gedownload worden
-\subsubsection{NotuBiz}
+\chapter{Evaluation}
+% \section{Crawler}
+% % Schrijven over hoeveel procent van de meetings correct gedownload worden
+% \subsubsection{NotuBiz}
 
-\subsubsection{iBabs}
-% Schrijven over time out times enzo van selenium om niet te vroeg element not found + subsequent crash te krijen?
+% \subsubsection{iBabs}
+% % Schrijven over time out times enzo van selenium om niet te vroeg element not found + subsequent crash te krijen?
 
 
 \section{Video analysis}\label{sec:vidanalysisExp}
@@ -487,13 +486,13 @@ This normalisation removes all non-alphabetical characters and converts all text
 \end{figure}
 
 as can be seen from figure \ref{fig:whisperExperiment}, the transcription WER in regular meetings is in line with what can be expected from the Whisper benchmarks presented in \cite{radford2023robust} (illustrated in figure \ref{fig:whisperwer}).
-One interesting observation is the large difference between Zoom meetings and regular meetings. For a couple years during the nationwide COVID regulations, the municipality meetings took place online. During these meetings, every participant used their own device and microphone, a general lower audio quality, with large quality differences between different speakers.
+One interesting observation is the large difference between Zoom meetings and regular meetings. For a couple years during the nationwide COVID regulations, the municipality meetings took place online. During these meetings, every participant used their own device and microphone, a general lower audio quality, with large quality differences between different speakers probably contributing to a lower transcription accuracy.
 
 
 \subsection{Pyannote}\label{sec:pyanExp}
 As described in section \ref{sec:pyannote}, speaker diarisation is scored based on the Diarisation Error Rate (DER). At the time of writing, pyannote.audio offers the best performing speaker diarisation, as shown in figure \ref{fig:pyanres}. 
 
-To test how well pyannote performs on the municipality dataset, I manually annotated 30 random minutes of meetings, distributed over five different meetings. I used audio tool Audacity to obtain millisecond-accurate timestamps. During manual diarisation, speakers were named arbitrarily. After diarisation, the manual speaker names were mapped to the speaker names given by pyannote to make sure the confusion rate metric can be performed.
+To test how well pyannote performs on the municipality dataset, I manually annotated 30 random minutes of meetings, distributed over five different meetings. I used audio tool Audacity \footnote{https://www.audacityteam.org/} to obtain millisecond-accurate timestamps. During manual diarisation, speakers were named arbitrarily. After diarisation, the manual speaker names were mapped to the speaker names given by pyannote to make sure the confusion rate metric can be performed.
 
 To address systemic differences in the idea when speech begins and ends, I performed two metrics. One with a 500 milliseconds collar, one with a 50 milliseconds collar, and one without a collar. 
 A collar is a margin of time around each speaker turn boundary. A 250 milliseconds collar would mean that the 125 milliseconds before and after each speaker change are excluded from evaluation.
@@ -509,7 +508,7 @@ Comparing figure \ref{fig:pyanExperiment} to the benchmark results in figure\ref
 Firstly, the measured Confusion rate is significantly lower than in the official benchmarks. Additionally, the average Miss- and False Alarm rates are roughly equivalent to those in the benchmark results. However, my application exhibits a few high outliers, predominantly originating from Zoom meetings. These outliers, as discussed in the previous section, are introduced by the same drawbacks associated with the online meeting environment.
 Finally, the DER, combining all previous mentioned metrics, is again fairly similar to the official benchmarks, even including the Zoom outliers. 
 For all evaluated metrics, the median values are either comparable to- or notably lower than those in the official benchmarks. Indicating a strong general performance.
-% TODO Mention that the good/ better results miught be explained by the general format of the meetings: There is not much overlapping speech and proffesional microphones are used. (except for the zoom meeings, where there is more overlapping speech due to lag and worse microphones)
+One potential reason as to why pyannote seems to perform better on these meetings, is the relative simple structure of the meetings. There is not too much overlapping speech and speakers generally are speaking through good microphones.
 
 \subsection{Agenda points}
 Using the agenda points provided by some meetings as a ground truth, I tested the video segmentation script described in section \ref{sec:agendapoints}, answering the research question \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}?
@@ -528,8 +527,8 @@ Besides the uninspiring accuracy results, there are some other hurdles preventin
 Second is the sliding window approach used. Long meetings easily contain several thousand spoken sentences, all of which need to be fed to the LLM separately. Even with heavy optimization such as combining sentences, a single video can easily take multiple hours to process.
 
 
-\section{Search engine}
-To Answer the main research question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? and the subquestion \textit{how well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed}?, I gathered 20 participants and tasked them to find the answer to five questions using five different search methods.
+\section{Search engine}\label{sec:searchEngineExp}
+To Answer the main research question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? and the subquestion \textit{how well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed}?, I gathered 10 participants and tasked them to find the answer to five questions using five different search methods.
 
 \begin{enumerate}
     \item The contemporary way, scrolling through the video and using its agenda points;
@@ -539,8 +538,7 @@ To Answer the main research question \textit{how can AI be utilized in order to 
     \item Using the chat function.
 \end{enumerate}
 
-For each participant, the search methods were randomly mapped to a question. 
-Each session was recorded so the time taken for each question, any filters used, or other relevant information could be analysed later.
+For each participant, the search methods were randomly mapped to a question. The participants had three minutes to answer each question. In the scenario where a satisfactory answer is not found within the given time, the search is aborted and this is noted.
 
 The questions were:
 \begin{enumerate}
@@ -551,23 +549,34 @@ The questions were:
     \item Wat is het doel van het voorstel met betrekking tot de gemeenschappelijke regeling van de bedrijfsvoeringspartner?
 \end{enumerate}
 
-a
-% TODO: grafieken en data parsen en hierin zetten!
+\begin{figure}
+    \centering
+    \includegraphics[width=0.90\textwidth]{images/search_methods_box_plot.png}
+    \caption{search engine results}
+    \label{fig:engineResults}
+\end{figure}
+
+Figure \ref{fig:engineResults} shows the results of this experiment, disregarding the search attempts where an answer was not found in time. Observing these results, it can be concluded that the contemporary method of scrolling through the video is by far the least efficient. On top of the fact that the average search time is almost three times as slow as the second slowest method, in 70\% of the cases, a valid answer was not found within the given three minutes.
+
+The three Weaviate search methods all performed roughly equal, with BM25 taking the lead. As can be seen, vector search brought a higher degree of variability with it. Despite this variability, the interquartile range is not remarkably high compared to the other Weaviate search methods. 
+
+On the surface the chat functionality seems to work the quickest. However, this could have something to do with the specific questions asked. For about 20\% of the participants, the chat functionality could not give a valid answer. This is because if the answer to the questions is not among the top results returned by Weaviate, the LLM will not be capable of answering the question. In some cases, the LLM even hallucinated an answer, thinking it was correct despite this not being the case. 
+In the prompt the LLM is tasked to answer that it does not know something if the information is not in the provided context. Sometimes, this instruction is not properly followed and the LLM will make up an answer.
+Unfortunately, it is not easily detectable when an answer is a hallucination or true. Thus, one should not rely without second thought on answers given by the chat bot. When receiving a response, the answer should always be verified.
+
 
 \chapter{Conclusion}
-Looking back at the main research question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? It can be concluded from figure \ref{} that a strong and user friendly system of information retrievability has been developed, as indicated by the significantly quicker retrieval times. 
+Looking back at the main research question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? It can be concluded from figure \ref{fig:engineResults} that a strong and user friendly system of information retrievability has indeed been developed, as indicated by the significantly quicker retrieval times. 
 
 This has been achieved by making use of a custom written Whisper ASR and pyannote.audio speaker diarisation pipeline. In this pipeline, videos are transcribed and diarised, after which they are embedded and inserted in a Weaviate vector database. Both video analysis tool implementations and the Weaviate are measured to perform either on par with- or better than the current state-of-the-art benchmark evaluations, answering the research question \textit{what state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances}? and \textit{what state-of-the-art information retrieval techniques can be leveraged to develop an efficient video information retrieval system}?.
 
 The research question topic segmentation research question, \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}? did not receive an answer as positive as the previous research questions. It turned out that several contemporary complications, namely context window and compute power, hindered the development of creating an accurate topic segmentation system usable in governmental meeting archives.
 
-Finally, a chat bot system with access to the Weaviate database allows the user to ask questions regarding specific meetings in a conversational style. As shown in figure \ref{}, this chat bot scores ....., indicating that .....
+Finally, a chat bot system with access to the Weaviate database allows the user to ask questions regarding specific meetings in a conversational style. As shown in figure \ref{fig:engineResults}, this chat bot scores significantly better than the contemporary search method and slightly better than the three other implemented search methods, indicating that the research question \textit{how well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed}? can be positively answered, with the caveat that the chat bot will sometimes hallucinate if it can not find an answer. It is hard to know exactly when responses are hallucinations, meaning manual verification is always necessary when receiving an answer from the chat bot.
 
 % Ik denk dat ik hier nog iets wil over een toekomstig onderzoek waar nog meer naar gekeken kan worden? IDK
 
-% TODO vertellen dat de cross video speaker recognition aardig werkt (nog kwantificeren hoe goed pr3ecies), alleen bij de corona online meetings werkte het een stuk minder geod, vanwege de irreguliere mics en de hoge gain. Dit betekent dus dat de spreker herkenning gelinkt is aan de (type) mic
-
-% Ook een afbeelding toevoegen van de verschillende gains in zoom meetings en geen zoom meetings die dat aantoont
+% Ook een afbeelding toevoegen van de verschillende gains in zoom meetings en geen zoom meetings die dat aantoont??
 
 
 \printbibliography
