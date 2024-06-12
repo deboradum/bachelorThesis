@@ -38,7 +38,7 @@ async function sendChat(newQuestion) {
         })
     };
     console.log(options)
-    const resp = await fetch(`http://${import.meta.env.VITE_API_URL}/api/chat`, options)
+    const resp = await fetch(`${import.meta.env.VITE_API_URL}/api/chat`, options)
     const data = await resp.json();
     console.log(data)
     if (data.response) {

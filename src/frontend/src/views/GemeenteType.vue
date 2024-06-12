@@ -13,7 +13,7 @@ defineProps({
 
 const gemeenteYears = ref([]);
 
-fetch(`http://${import.meta.env.VITE_API_URL}/api/gemeenteYears?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}`)
+fetch(`${import.meta.env.VITE_API_URL}/api/gemeenteYears?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}`)
     .then(response => response.json())
     .then(data => {
         gemeenteYears.value = data.years;

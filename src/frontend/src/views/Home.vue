@@ -8,7 +8,7 @@ const router = useRouter()
 
 const gemeentes = ref([]);
 
-fetch(`http://${import.meta.env.VITE_API_URL}/api/gemeentes`)
+fetch(`${import.meta.env.VITE_API_URL}/api/gemeentes`)
     .then(response => response.json())
     .then(data => gemeentes.value = data.gemeentes)
 

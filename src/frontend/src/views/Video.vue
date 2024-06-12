@@ -22,13 +22,13 @@ const agendaColors = ref({ "": "bg-transparent" })
 const transcript = ref("No transcript found")
 const speakerNameMapping = ref({})
 
-fetch(`http://${import.meta.env.VITE_API_URL}/api/getVideoData?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+fetch(`${import.meta.env.VITE_API_URL}/api/getVideoData?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
     .then(response => response.json())
     .then(data => {
         videoDuration.value = Math.round(data.duration)
     })
 
-fetch(`http://${import.meta.env.VITE_API_URL}/api/getVideo?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+fetch(`${import.meta.env.VITE_API_URL}/api/getVideo?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
     .then(response => {
         if (!response.ok) {
             throw new Error('Failed to fetch video');
@@ -43,7 +43,7 @@ fetch(`http://${import.meta.env.VITE_API_URL}/api/getVideo?gemeente=${route.para
         vid404.value = true
     });
 
-fetch(`http://${import.meta.env.VITE_API_URL}/api/getSpeakers?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+fetch(`${import.meta.env.VITE_API_URL}/api/getSpeakers?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
 .then(response => response.json())
 .then(data => {
     console.log(data.speakers)
@@ -52,13 +52,13 @@ fetch(`http://${import.meta.env.VITE_API_URL}/api/getSpeakers?gemeente=${route.p
     createSpeakerNameMapping()
 })
 
-// fetch(`http://${import.meta.env.VITE_API_URL}/api/getTranscript?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+// fetch(`${import.meta.env.VITE_API_URL}/api/getTranscript?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
 // .then(response => response.json())
 // .then(data => {
 //     transcript.value = data.transcript
 // })
 
-fetch(`http://${import.meta.env.VITE_API_URL}/api/getAgenda?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+fetch(`${import.meta.env.VITE_API_URL}/api/getAgenda?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
 .then(response => response.json())
 .then(data => {
     var total = 0;

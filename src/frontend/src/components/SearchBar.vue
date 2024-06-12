@@ -66,7 +66,7 @@ async function vectorBM25() {
         })
     };
     console.log(weaviateOptions)
-    const weaviateResponse = await fetch(`http://${import.meta.env.VITE_API_URL}/api/weaviate/searchBM25`, weaviateOptions)
+    const weaviateResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/weaviate/searchBM25`, weaviateOptions)
     const weaviateData = await weaviateResponse.json();
     searchResults.value = weaviateData.objects
     console.log(weaviateData)
@@ -79,7 +79,7 @@ async function vectorSearch() {
         body: JSON.stringify({ text: [searchQuery.value] })
     };
     console.log(embedOptions)
-    const embedResponse = await fetch(`http://${import.meta.env.VITE_API_URL}/api/embed`, embedOptions)
+    const embedResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/embed`, embedOptions)
     const embedData = await embedResponse.json();
     const embedVector = embedData["embeddings"][0]
 
@@ -122,7 +122,7 @@ async function vectorSearch() {
             maxTime: props.maxTime,
         })
     };
-    const weaviateResponse = await fetch(`http://${import.meta.env.VITE_API_URL}/api/weaviate/searchVector`, weaviateOptions)
+    const weaviateResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/weaviate/searchVector`, weaviateOptions)
     const weaviateData = await weaviateResponse.json();
     searchResults.value = weaviateData.objects
     console.log(weaviateData)
@@ -135,7 +135,7 @@ async function hybridSearch() {
         body: JSON.stringify({ text: [searchQuery.value] })
     };
     console.log(embedOptions)
-    const embedResponse = await fetch(`http://${import.meta.env.VITE_API_URL}/api/embed`, embedOptions)
+    const embedResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/embed`, embedOptions)
     const embedData = await embedResponse.json();
     const embedVector = embedData["embeddings"][0]
 
@@ -180,7 +180,7 @@ async function hybridSearch() {
             maxTime: props.maxTime,
         })
     };
-    const weaviateResponse = await fetch(`http://${import.meta.env.VITE_API_URL}/api/weaviate/searchHybrid`, weaviateOptions)
+    const weaviateResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/weaviate/searchHybrid`, weaviateOptions)
     const weaviateData = await weaviateResponse.json();
     searchResults.value = weaviateData.objects
     console.log(weaviateData)

@@ -38,7 +38,7 @@ watch(searchLimit, (searchLimit, _) => {
 })
 
 watch(searchGemeente, (searchGemeente, _) => {
-    fetch(`http://${import.meta.env.VITE_API_URL}/api/gemeenteMeetingTypes?gemeente=${searchGemeente}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/gemeenteMeetingTypes?gemeente=${searchGemeente}`)
         .then(response => response.json())
         .then(data => availableTypes.value = data.types)
 
@@ -47,7 +47,7 @@ watch(searchGemeente, (searchGemeente, _) => {
 
 watch(searchType, (searchType, _) => {
     // console.log(searchType)
-    fetch(`http://${import.meta.env.VITE_API_URL}/api/gemeenteYears?gemeente=${searchGemeente.value}&meetingType=${searchType}`)
+    fetch(`${import.meta.env.VITE_API_URL}/api/gemeenteYears?gemeente=${searchGemeente.value}&meetingType=${searchType}`)
         .then(response => response.json())
         .then(data => availableYears.value = data.years)
 
