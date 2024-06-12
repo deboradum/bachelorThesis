@@ -6,6 +6,8 @@ import SearchVideo from './SearchVideo.vue';
 import AgendaPoints from '../components/AgendaPoints.vue';
 import VideoChat from "../components/VideoChat.vue"
 
+import 'dotenv'
+
 const route = useRoute()
 
 const vid404 = ref(false)
@@ -20,13 +22,13 @@ const agendaColors = ref({ "": "bg-transparent" })
 const transcript = ref("No transcript found")
 const speakerNameMapping = ref({})
 
-fetch(`http://127.0.0.1:3012/api/getVideoData?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+fetch(`http://${import.meta.env.VITE_API_URL}/api/getVideoData?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
     .then(response => response.json())
     .then(data => {
         videoDuration.value = Math.round(data.duration)
     })
 
-fetch(`http://127.0.0.1:3012/api/getVideo?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+fetch(`http://${import.meta.env.VITE_API_URL}/api/getVideo?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
     .then(response => {
         if (!response.ok) {
             throw new Error('Failed to fetch video');
@@ -41,7 +43,7 @@ fetch(`http://127.0.0.1:3012/api/getVideo?gemeente=${route.params.gemeenteName}&
         vid404.value = true
     });
 
-fetch(`http://127.0.0.1:3012/api/getSpeakers?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+fetch(`http://${import.meta.env.VITE_API_URL}/api/getSpeakers?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
 .then(response => response.json())
 .then(data => {
     console.log(data.speakers)
@@ -50,13 +52,13 @@ fetch(`http://127.0.0.1:3012/api/getSpeakers?gemeente=${route.params.gemeenteNam
     createSpeakerNameMapping()
 })
 
-// fetch(`http://127.0.0.1:3012/api/getTranscript?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+// fetch(`http://${import.meta.env.VITE_API_URL}/api/getTranscript?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
 // .then(response => response.json())
 // .then(data => {
 //     transcript.value = data.transcript
 // })
 
-fetch(`http://127.0.0.1:3012/api/getAgenda?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+fetch(`http://${import.meta.env.VITE_API_URL}/api/getAgenda?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
 .then(response => response.json())
 .then(data => {
     var total = 0;
@@ -93,7 +95,7 @@ async function getSpeakerName(speakerID) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: route.params.videoID, speakerID: speakerID })
     };
-    const nameResponse = await fetch(`http://127.0.0.1:3012/api/weaviate/getSpeakerName`, options)
+    const nameResponse = await fetch(`http://${import.meta.env.VITE_API_URL}/api/weaviate/getSpeakerName`, options)
     const data = await nameResponse.json();
 
     return data.name
@@ -230,7 +232,7 @@ function goToOriginalVideo() {
 }
 
 async function downloadInfo() {
-    const resp = await fetch(`http://127.0.0.1:3012/api/downloadArchive?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+    const resp = await fetch(`http://${import.meta.env.VITE_API_URL}/api/downloadArchive?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
     if (!resp.ok) {
         console.error('Failed to fetch the file:', resp.statusText);
         return;
@@ -248,7 +250,7 @@ async function downloadInfo() {
 }
 
 async function downloadTranscript() {
-    const resp = await fetch(`http://127.0.0.1:3012/api/downloadTranscript?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+    const resp = await fetch(`http://${import.meta.env.VITE_API_URL}/api/downloadTranscript?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
     if (!resp.ok) {
         console.error('Failed to fetch transcript:', resp.statusText);
         return;

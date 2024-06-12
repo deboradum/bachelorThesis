@@ -19,7 +19,7 @@ const searchVideoID = ref("");
 const searchResults = ref([]);
 
 
-fetch('http://127.0.0.1:3012/api/gemeentes')
+fetch(`http://${import.meta.env.VITE_API_URL}/api/gemeentes`)
     .then(response => response.json())
     .then(data => gemeentes.value = data.gemeentes)
 

@@ -9,7 +9,7 @@ const router = useRouter()
 
 const gemeenteVideos = ref([]);
 
-fetch(`http://127.0.0.1:3012/api/getVideos?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}`)
+fetch(`http://${import.meta.env.VITE_API_URL}/api/getVideos?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}`)
     .then(response => response.json())
     .then(data => gemeenteVideos.value = data.videos)
 

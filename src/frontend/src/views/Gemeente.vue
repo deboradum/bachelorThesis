@@ -13,7 +13,7 @@ defineProps({
 
 const gemeenteTypes = ref([]);
 
-fetch(`http://127.0.0.1:3012/api/gemeenteMeetingTypes?gemeente=${route.params.gemeenteName}`)
+fetch(`http://${import.meta.env.VITE_API_URL}/api/gemeenteMeetingTypes?gemeente=${route.params.gemeenteName}`)
     .then(response => response.json())
     .then(data => gemeenteTypes.value = data.types)
 
