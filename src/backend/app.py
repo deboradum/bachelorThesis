@@ -3,6 +3,7 @@ import os
 import time
 import torch
 import zipfile
+import tempfile
 
 from dotenv import load_dotenv
 
@@ -434,7 +435,8 @@ async def chat(body: ChatBody):
 
 
 BASE_PATHS = [
-    "/Volumes/Samsung_T5/data/",
+    # "/Volumes/Samsung_T5/data/",
+    "../appDockerData",
     # "/Volumes/Drive/data/",
 ]
 @app.get("/api/gemeentes")
@@ -652,3 +654,25 @@ async def download(gemeente: str, meetingType: str, year: str, video: str):
     os.remove(tmp_path)
 
     return response
+
+@app.get("/api/downloadTranscript")
+async def download_transcript(gemeente: str, meetingType: str, year: str, video: str):
+    print("test")
+    base = None
+    for path in BASE_PATHS:
+        if os.path.isfile(f"{path}/{gemeente}/{meetingType}/{year}/transcripts/{video}.json"):
+            base = f"{path}/{gemeente}/{meetingType}/{year}"
+    print("test")
+    transcript_path = f"{base}/transcripts/{video}.json"
+
+    with open(transcript_path, "r") as f:
+        data = json.load(f)
+        transcript = data.get("text", "Sorry, geen transcript was gevonden.").strip()
+    print(transcript)
+    with tempfile.NamedTemporaryFile(delete=False, suffix=".txt") as temp_file:
+        temp_file.write(transcript.encode("utf-8"))
+        temp_file_path = temp_file.name
+
+    return FileResponse(
+        temp_file_path, filename=f"{video}.txt", media_type="text/plain"
+    )

@@ -247,6 +247,24 @@ async function downloadInfo() {
     window.URL.revokeObjectURL(url);
 }
 
+async function downloadTranscript() {
+    const resp = await fetch(`http://127.0.0.1:3012/api/downloadTranscript?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+    if (!resp.ok) {
+        console.error('Failed to fetch transcript:', resp.statusText);
+        return;
+    }
+    const blob = await resp.blob();
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.setAttribute('download', `${route.params.videoID}Transcript.txt`);
+    document.body.appendChild(link);
+    link.click();
+    // Cleanup
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+}
+
 </script>
 
 <template>
@@ -257,7 +275,7 @@ async function downloadInfo() {
                     video {{
                     route.params.videoID }}.mp4
                 </h1>
-                <button @click="downloadInfo()">Download information</button>
+                <button @click="downloadTranscript()">Download transcript</button>
                 <div class="my-6 max-w-4xl flex flex-col justify-center">
                     <video v-if="videoUrl" id="videoPlayer" controls preload="auto">
                         <source :src="videoUrl" type="video/mp4">
@@ -293,7 +311,7 @@ async function downloadInfo() {
                                 <hr v-if="isOffset()" :style="{ width: speakers[0].start + 'px' }"
                                     class=" h-3 border-0 rounded bg-transparent">
                                 <!-- TMP hot fix! should be the above commented loc -->
-                                    <!-- <hr :style="{ width: 2 + 'px' }"
+                                <!-- <hr :style="{ width: 2 + 'px' }"
                                     class=" h-3 border-0 rounded bg-transparent"> -->
                                 <hr v-for="s in speakers" :style="{ width: s.end-s.start + 'px' }"
                                     class=" h-3 border-0 rounded" :class="speakerColors[s.speaker]" :title="s.name">
