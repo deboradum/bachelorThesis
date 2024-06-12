@@ -20,3 +20,4 @@ src/models/*
 
 !src/models/README.md
 !videotulenDemo.mp4
+!src/frontend/.env
