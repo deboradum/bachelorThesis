@@ -4,6 +4,10 @@
 % Filling your thesis with only lorem ipsum is not advised.
 \usepackage{lipsum}
 \usepackage{listings}
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+\usepackage{fancyvrb}
+\usepackage{xcolor}
 
 % Citations
 \usepackage[style=numeric]{biblatex}
@@ -33,13 +37,27 @@ One of the foundations of a strong democracy is transparency. Citizens must have
 This law is applicable to all governmental bodies, from the house of representatives to local municipalities to the tax authority. The three most important terms the Woo brings are: \textit{active publication}, stating government bodies should actively publish some types of information. \textit{Publication on request} states that information should be made public on request. Lastly, the \textit{information management obligation} states that all this information should be easily accessible. 
 
 Various online tools such as the official Woo-index \footnote{https://organisaties.overheid.nl/woo} and Woogle \footnote{https://woogle.wooverheid.nl} offer the ability to search through a wide range of uploaded documents and information. 
-Though millions of documents are already publishes and searchable, the searchability of one important type of information is lacking; the meetings. Decisions, from large to small, are made during long meetings that are livestreamed and archived. These video archives, often three to four hours, not only require vast amounts of storage, they are also difficult to comb through. 
+Though millions of documents are already published and searchable, the searchability of one important type of information is lacking; the meetings. Decisions, from large to small, are made during long meetings which are livestreamed and archived. These video archives, often three to four hours long, not only require vast amounts of storage, they are also difficult to comb through. 
 Imagine a journalist writing an article about a new piece of legislation that was, among other things, debated the night before by the local municipality. They want to write what the different parties think of the bill and how they voted. Currently, they would have to watch or skip through to video until they find the part where they talk about the proposed law. Then, they would have to watch the debate and take notes on what each Representative argued, along with their arguments.  Understandably, this simple sounding process quickly becomes both time consuming and inefficient. 
 \\ \\
 This research provides a solution to this issue by answering the question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? In order to land at a satisfying answer to this research question, some related questions need to be answered first. 
 First, the video archives need to be obtained. This means that the first part of this research will be finding an answer to the question \textit{what are the different archive formats local authorities host in order to comply with the Woo and how are these formats exploited to retrieve as much information as possible}?
 To extract as much relevant information from the video archives, the question \textit{what state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances}? needs to be answered. During the aforementioned hour long meetings, many different subjects are discussed. By answering the question \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}?, this fact can be used to provide a better overview of the video, as well as enhancing searchability. Finally, an answer to the question \textit{what state-of-the-art information retrieval techniques can be leveraged to develop an efficient video information retrieval system}? should be found, tying everything together.
-On top of these base questions, the last part of this research regards an integration of the search system with a large language model, answering the final sub question \textit{how well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed}?
+On top of these base questions, the last part of this research regards an integration of the search system with a large language model, answering the final sub question \textit{how well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed}? Building such a chat bot allows for an even quicker answer to questions, without the need to even search for the answer yourself.
+\\\\
+In summary, the research questions this thesis aims to answer are:
+\begin{enumerate}
+    \item What are the different archive formats local authorities host in order to comply with the Woo and how are these formats exploited to retrieve as much information as possible?
+    \item What state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances?
+    \item How accurately can such a video be segmented into the meaningfully different parts which are discussed?
+    \item What state-of-the-art information retrieval techniques can be leveraged to develop an efficient video information retrieval system?
+    \item How well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed?
+    \\
+    
+    Together, these sub-research questions can be used to answer the main question:
+    \item How can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils?
+\end{enumerate}
+
 
 \chapter{Related work}
 The act of archiving and transcribing parliamentary meetings is not new. Most big governmental organisations such as the European Parlemen \footnote{https://www.europarl.europa.eu/plenary/nl/debates-video.html} and the Dutch House of Representatives \footnote{https://debatdirect.tweedekamer.nl/} host an online archive that offers an elementary search mechanism. 
@@ -280,13 +298,13 @@ The retrieval of the relevant context is mostly done by the use of a dense vecto
     \centering
     \includegraphics[width=0.9\textwidth]{images/rag.png}
     \caption{Retrieval Augmented Generation pipeline}
-    \label{fig:pyanres}
+    \label{fig:rag}
 \end{figure}
 
 
 \chapter{Methods}
-\section{Crawler}
-Before starting any analysis work, the first sub research question \textit{what are the different archive formats local authorities host in order to comply with the Woo and how are these formats exploited to retrieve as much information as possible?} needs to be answered.
+\section{Archival data extraction}
+Before starting any analysis work, the first research question, \textit{what are the different archive formats local authorities host in order to comply with the Woo and how are these formats exploited to retrieve as much information as possible?}, needs to be answered.
 
 An overwhelming amount of Dutch municipalities are allied with one of two service providers that archive, host and index past council meetings. These two service providers are \href{https://www.ibabs.com}{iBabs} and \href{https://www.notubiz.nl/}{NotuBiz}. NotuBiz alone serves over 250 local municipalities, provinces and water authorities, while iBabs serves several hundred more. 
 
@@ -316,7 +334,9 @@ When all video pages have been scraped, Selenium is used to open each page, find
 After all M3U URLs have been retrieved, the file containing the download links is read and videos are downloaded using a M3U download tool \footnote{https://github.com/josephcappadona/m3u8downloader}.
 
 
-\section{Video analysis}
+\section{Video- and audio analysis}
+This section explains the design and design choices made in order to answer the second research question, \textit{What state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances}?
+
 Machine learning is a constantly changing field that evolves rapidly. Every month, dozens of new models and model architectures are released that are more effective in specific niche scenarios. 
 With this in mind, one of the fundamental principles I decided to uphold in the creation of the analysis pipeline, is that the design of the AI clients must be as modular as possible. This is primarily achieved through the implementation of Python class inheritance. 
 
@@ -326,7 +346,7 @@ As for the ASR client, A base \textit{Transcriber} class specifying what methods
 In the case of the ASR client, the only model-specific method that must be implemented is the \textit{transcribe} method. \textit{transcribe} should take in an input path and an output path, which will be used to load the audio file and save the transcription.
 Other methods such as loading transcriptions are model invariant.
 
-In the current analysis pipeline code, two Whisper models have been implemented: one client using MLX, a Python array framework allowing fast machine learning on Apple silicon devices, and one using PyTorch. 
+In the current analysis pipeline code, two transcriber classes have been implemented: one client using Whisper on MLX, a Python array framework allowing fast machine learning on Apple silicon devices, and one using the official Whisper implementation on PyTorch. Since the underlying models and weights are the same however, there will not be a difference in the output of these two different transcribers.
 
 \begin{lstlisting}[language=Python, caption={Modular transcriber class implemented in Apple's MLX Whisper port and PyTorch's Whisper port.}]
 class Transcriber:
@@ -395,29 +415,59 @@ The primary requirements for this project be lightweight, fast, and multilingual
 
 In the end I selected the sentence-transformers/all-mpnet-base-v2 model \footnote{https://huggingface.co/sentence-transformers/all-mpnet-base-v2}. Its compact size of only 109 million parameters, coupled with its multilingual capabilities make it the perfect model for this task.
 
-\subsection{Agenda points}\label{sec:agendapoints}
-For the research question \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}, a agenda point topic segmentation client needs to be written. It should take in the transcript of a meeting, and it should return a list of agenda points and times, specifying when these topics start and end.
+\section{Agenda point segmentation}\label{sec:agendapoints}
+To answer research question three, \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}, an agenda point topic segmentation client needs to be written. It should take in the transcript of a meeting, and it should return a list of agenda points and times, specifying when these topics start and end.
 
 % As it turned out, some of the meetings already have their agenda points provided by the archiving host. For the meetings where this is not the case, a custom agenda point generator that utilizes LLMs has been written.
 
-The concept of topic segmentation is quite simple. First, the transcript of a meeting is fed into an LLM with the task to label the most important topics discussed during the meeting, in chronological order. 
+The concept of the topic segmentation client is quite simple. First, the transcript of a meeting is fed into an LLM with the task to label the most important topics discussed during the meeting, in chronological order. 
 Next, for each topic, the LLM should figure out when the agenda point starts in the meeting. This is done using a sliding window over the transcript. 
-One by one, sentences, along with their starting time and the current topic, are sent to a LLM. The LLM is then tasked to return either true or false depending on if it thinks the agenda point starts at the current sentence. When this is the case, the topic is considered labeled and the next topic is prompted.
+One by one, sentences, along with their starting time and the current topic, are sent to a LLM. The LLM is then tasked to return either true or false depending on if it thinks the agenda point starts at the current sentence. When this is the case, the topic is considered labeled and the next topic is prompted. 
+A pseudocode representation of this algorithm is presented in \ref{alg:topic}.
 
-\section{Retrieval}
-\subsection{Weaviate}\label{sec:weaviate}
-The created Weaviate client allows the user to easily perform default operations such as creating and deleting collections (similar to tables in relational databases), inserting and deleting entries and getting collection metadata. 
+\begin{algorithm}
+\caption{Agenda topic Segmentation Algorithm}
+\label{alg:topic}
+\begin{algorithmic}
+    \Require Transcript $T$ of a meeting
+    \State $Topics \gets LLM(T, \text{task="label"})$
+    
+    \For{each $Topic$ in $Topics$}
+        \State $Timed \gets \text{False}$
+        \State $i \gets 1$
+        
+        \While{not $Timed$ and $i \leq \text{length}(T)$}
+            \State $Sentence \gets T[i]$
+            \State $Response \gets LLM(\text{input=}\{Sentence, Topic\}, \text{task="topicStart?"})$
+            
+            \If{$Response$ is True}
+                \State $StartTime \gets \text{getStartTime}(Sentence)$
+                \State $Timed \gets \text{True}$
+            \Else
+                \State $i \gets i + 1$
+            \EndIf
+        \EndWhile
+    \EndFor
+    
+    \State \Return $TimedTopics$
+\end{algorithmic}
+\end{algorithm}
+
+\section{Information retrieval}\label{sec:weaviate}
+For question four, \textit{What state-of-the-art information retrieval techniques can be leveraged to develop an efficient video information retrieval system}?, a Weaviate vector database Python client has been built.
+The created Weaviate client allows the user to easily perform simple operations such as creating and deleting collections (similar to tables in relational databases), inserting and deleting entries and getting collection metadata. 
 Besides these basic operations, three search methods described in section \ref{retrievalSection} have been implemented: Vector search, BM25 search and Hybrid search.
 
 All search methods allow the user to specify filter parameters such as government, year, speaker and more. Invariant of employed the search method, the client returns data in a uniform format—an array of relevant result objects. Each result object within this array includes properties such as meeting ID, government, year, etc., the result's UUID, its vector representation, and its relevance score.
 
-\subsection{RAG}
+\section{RAG chat bot}
+
 RAG consists of two parts: retrieval and generation. A user query is first fed in to the retrieval system which returns one or more pieces of context that are most relevant to the specified query. Next, this context is added to the user query after which a LLM will answer the query using the acquired context. 
 
-The final web app uses a BM25 based retrieval pipeline as specified in section \ref{sec:weaviate}. If no results are found, this is signaled to the user and the process is aborted. In the likely scenario that results are found, the results are added to the query and the LLM is called to answer the question.
+In essence, the created chat bot pipeline is similar to figure \ref{fig:rag}. The final web app uses a BM25 based retrieval pipeline as specified in section \ref{sec:weaviate}. If no results are found, this is signaled to the user and the process is aborted. In the likely scenario that results are found, the results are added to the query and the LLM is called to answer the question.
 
 Identical to the other clients, the LLM client designed to be modular and easily swapped. The base model only has a single model dependant method: \textit{run}. \textit{run} takes the chat history as an arguments and prompts the LLM. 
-In the final product one of two LLM clients are used: A locally running Llama client or a GPT client that calls the OpenAI api. The former can be used on machines that have sufficient RAM and a strong GPU. The latter is recommended for other machines. Since it calls the OpenAI GPT api it is both quick and accurate, bringing with it only a small cost of \$15 per one million output tokens.
+In the final product one of two LLM clients are used: A locally running Llama client or a GPT client that calls the OpenAI API. The former can be used on machines that have sufficient RAM and a strong GPU. The latter is recommended for other machines. Since it calls the OpenAI GPT API it is both quick and accurate, bringing with it only a small cost of \$15 per one million output tokens.
 
 \begin{lstlisting}[language=Python, caption={Modular LLM class.}]
 class LLM:
@@ -427,7 +477,7 @@ class LLM:
 \end{lstlisting}
 
 \section{Search engine}
-To make all previously mentioned functionalities accessible to the end user, I developed a user-friendly web application using front-end framework Vue3.
+To answer the main research question, \textit{How can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils?}, all previously mentioned functionalities should be combined. To do this, I created a user-friendly search engine using front-end framework Vue3.
 
 The web app offers two primary functionalities. The first is a global search feature, 
 enabling users to search through all available videos for spoken information. For more specific queries, users can apply selectable filters to search by a particular government, meeting type, or year.
@@ -470,13 +520,15 @@ This necessary information is only 3 gigabytes, which is much more easily distri
 % % Schrijven over time out times enzo van selenium om niet te vroeg element not found + subsequent crash te krijen?
 
 
-\section{Video analysis}\label{sec:vidanalysisExp}
-Answering the research question \textit{what state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances}? involves evaluating the two utilized analysis tools in the created analysis pipeline: Whisper and pyannote.
+\section{Video- and audio analysis}\label{sec:vidanalysisExp}
+To obtain a satisfactory answer to research question 2, an evaluation of the two analysis tools used in the pipeline—Whisper and pyannote—is necessary.
+
 \subsection{Whisper}\label{sec:whisperExp}
 The Word Error Rate (WER) (equation \ref{eq:wer}) is a standard metric to evaluate ASR systems. 
 
-To evaluate Whisper's performance on the scraped meetings, I manually transcribed 40 minutes of meetings, selected randomly from seven different meetings. To account for structural- and unimportant transcription differences, a normalisation is applied to both the reference and the hypothesis text. 
-This normalisation removes all non-alphabetical characters and converts all text to lowercase. 
+To evaluate Whisper's performance on the scraped meetings, I manually transcribed 40 minutes of meetings, selected randomly from seven different meetings. These randomly picked meetings are spread out over five different years, and three different municipalities. 
+To account for structural- and unimportant transcription differences, a normalisation is applied to both the reference and the hypothesis text. 
+This normalisation removes all non-alphabetical characters and converts all text to lowercase.
 
 \begin{figure}
     \centering
@@ -488,6 +540,27 @@ This normalisation removes all non-alphabetical characters and converts all text
 as can be seen from figure \ref{fig:whisperExperiment}, the transcription WER in regular meetings is in line with what can be expected from the Whisper benchmarks presented in \cite{radford2023robust} (illustrated in figure \ref{fig:whisperwer}).
 One interesting observation is the large difference between Zoom meetings and regular meetings. For a couple years during the nationwide COVID regulations, the municipality meetings took place online. During these meetings, every participant used their own device and microphone, a general lower audio quality, with large quality differences between different speakers probably contributing to a lower transcription accuracy.
 
+Another cause for error is when a speaker speaks quickly, without perfect articulation. 
+An example of such a situation where Whisper gets confused, is visualized in figure \ref{fig:whisperResultWERVis1}. In this figure, green text represents a substitution, while red text represents a deletion. The snippet of text is taken from a 2019 Haarlem meeting, with code $622012$, starting at 01:47:10. Here, the speaker is not clearly understandable, resulting in a transcription not making the most sense. 
+Luckily, these situations are not very common, as evidenced by the global WER given in figure \ref{fig:whisperExperiment}.
+
+\begin{figure}[htbp]\caption{Visualization of WER where green represents a substitution and red a deletion.}\label{fig:whisperResultWERVis1}
+    \centering
+\begin{Verbatim}[commandchars=\\\{\}]
+reference: ... ben ik toch een beetje benieuwd naar de reactie van het college. 
+En ik heb inderdaad ook het gevoel dat we vanavond toch al op het zuid gaan komen. 
+Dus waarom zouden we dat nu nog geheim verklaaren? ...
+
+hypothesis: ... ben ik toch een beetje benieuwd naar de reactie van het college. 
+En ik heb inderdaad ook het gevoel er wordt vanavond gewoon een besluit genomen, 
+dus waarom zouden we dat nu nog geheim verklaren? ...
+
+WER delta: ... ben ik toch een beetje benieuwd naar de reactie van het college 
+en ik heb inderdaad ook het gevoel \textcolor{green}{er} (dat) \textcolor{green}{wordt} (we) vanavond \textcolor{red}{toch al op} \textcolor{green}{gewoon} 
+(het) \textcolor{green}{een} (zuid) \textcolor{green}{besluit} (gaan) \textcolor{green}{genomen} (komen) dus waarom zouden we dat nu nog 
+geheim \textcolor{green}{verklaren} (verklaaren) ... 
+\end{Verbatim}
+\end{figure}
 
 \subsection{Pyannote}\label{sec:pyanExp}
 As described in section \ref{sec:pyannote}, speaker diarisation is scored based on the Diarisation Error Rate (DER). At the time of writing, pyannote.audio offers the best performing speaker diarisation, as shown in figure \ref{fig:pyanres}. 
@@ -510,10 +583,10 @@ Finally, the DER, combining all previous mentioned metrics, is again fairly simi
 For all evaluated metrics, the median values are either comparable to- or notably lower than those in the official benchmarks. Indicating a strong general performance.
 One potential reason as to why pyannote seems to perform better on these meetings, is the relative simple structure of the meetings. There is not too much overlapping speech and speakers generally are speaking through good microphones.
 
-\subsection{Agenda points}
-Using the agenda points provided by some meetings as a ground truth, I tested the video segmentation script described in section \ref{sec:agendapoints}, answering the research question \textit{how accurately can such a video be segmented into the meaningfully different parts which are discussed}?
+\section{Agenda point segmentation}
+Some meetings already had their agenda points labeled. By using these pre-labeled agenda points as a ground truth, I tested the created topic segmentation script described in section \ref{sec:agendapoints}, thus answering research question 3.
 
-I ran the script on 10 different meetings, using their provided agenda points as a ground truth. Next, I counted the number of missed agenda points and the number of false agenda points.
+I ran the segmentation script on 10 different meetings, using their provided agenda points as a ground truth. Next, I counted the number of missed agenda points and the number of false agenda points.
 
 \begin{figure}
     \centering
