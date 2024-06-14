@@ -8,6 +8,8 @@
 \usepackage{algpseudocode}
 \usepackage{fancyvrb}
 \usepackage{xcolor}
+\usepackage{subcaption}
+\usepackage{graphicx}
 
 % Citations
 \usepackage[style=numeric]{biblatex}
@@ -54,7 +56,7 @@ In summary, the research questions this thesis aims to answer are:
     \item How well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed?
     \\
     
-    Together, these sub-research questions can be used to answer the main question:
+    Together, these sub-research questions can be used to answer the main research question:
     \item How can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils?
 \end{enumerate}
 
@@ -533,7 +535,7 @@ This normalisation removes all non-alphabetical characters and converts all text
 \begin{figure}
     \centering
     \includegraphics[width=0.85\textwidth]{images/whisperBench.png}
-    \caption{Whisper transcription results}
+    \caption{Whisper transcription WER results}
     \label{fig:whisperExperiment}
 \end{figure}
 
@@ -565,21 +567,43 @@ geheim \textcolor{green}{verklaren} (verklaaren) ...
 \subsection{Pyannote}\label{sec:pyanExp}
 As described in section \ref{sec:pyannote}, speaker diarisation is scored based on the Diarisation Error Rate (DER). At the time of writing, pyannote.audio offers the best performing speaker diarisation, as shown in figure \ref{fig:pyanres}. 
 
-To test how well pyannote performs on the municipality dataset, I manually annotated 30 random minutes of meetings, distributed over five different meetings. I used audio tool Audacity \footnote{https://www.audacityteam.org/} to obtain millisecond-accurate timestamps. During manual diarisation, speakers were named arbitrarily. After diarisation, the manual speaker names were mapped to the speaker names given by pyannote to make sure the confusion rate metric can be performed.
+To test how well pyannote performs on the municipality dataset, I manually annotated 30 random minutes of meetings, distributed over five different meetings, from four different municipalities over three years. I used audio tool Audacity \footnote{https://www.audacityteam.org/} to obtain millisecond-accurate timestamps. During manual diarisation, speakers were named arbitrarily. After diarisation, the manual speaker names were mapped to the speaker names given by pyannote to make sure the confusion rate metric can be performed.
+
+One example of how a such a manual diarisation looks relative to a pyannote diarisation, can be seen in figure \ref{fig:manvspyan}. This snippet is taken from a Ridderkerk meeting in 2022, with code $938576$, starting at 00:41:10. As can be seen from the figure, the graph is mostly identical, ignoring some small starting- and ending points discrepancies. 
+One thing that stands out however, is the addition of two very short speaking turns picked up by pyannote. The first occurrence of this happens around 2530 seconds, where speaker 17 allegedly starts talking. This turns out to be just some noise resulting from the Zoom. Another the other short speaking turn, occurring at around 2615 seconds, is just a noise made by a meeting member, not worthy of being classified as speech. 
+
+\begin{figure}[htbp]
+    \centering
+    \begin{subfigure}{0.9\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/refDiar.png}
+        \caption{pyannote diarisation}
+        \label{fig:subfiga}
+    \end{subfigure}
+    \hfill
+    \begin{subfigure}{0.9\textwidth}
+        \centering
+        \includegraphics[width=\linewidth]{images/hypDiar.png}
+        \caption{Manual diarisation}
+        \label{fig:subfigb}
+    \end{subfigure}
+    \caption{Manual diarisation versus pyannote diarisation}
+    \label{fig:manvspyan}
+\end{figure}
 
 To address systemic differences in the idea when speech begins and ends, I performed two metrics. One with a 500 milliseconds collar, one with a 50 milliseconds collar, and one without a collar. 
 A collar is a margin of time around each speaker turn boundary. A 250 milliseconds collar would mean that the 125 milliseconds before and after each speaker change are excluded from evaluation.
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.89\textwidth]{images/error_rates_box_plots.png}
+    \includegraphics[width=0.98\textwidth]{images/error_rates_box_plots.png}
     \caption{pyannote speaker diarisation results}
     \label{fig:pyanExperiment}
 \end{figure}
 
-Comparing figure \ref{fig:pyanExperiment} to the benchmark results in figure\ref{fig:pyanres}, some interesting observations can be made. 
+Comparing figure \ref{fig:pyanExperiment} to the benchmark results in figure \ref{fig:pyanres}, some interesting observations can be made. 
 Firstly, the measured Confusion rate is significantly lower than in the official benchmarks. Additionally, the average Miss- and False Alarm rates are roughly equivalent to those in the benchmark results. However, my application exhibits a few high outliers, predominantly originating from Zoom meetings. These outliers, as discussed in the previous section, are introduced by the same drawbacks associated with the online meeting environment.
-Finally, the DER, combining all previous mentioned metrics, is again fairly similar to the official benchmarks, even including the Zoom outliers. 
+Finally, the Diarisation Error Rate, combining all previous mentioned metrics, is again fairly similar to the official benchmarks, even including the Zoom outliers. 
 For all evaluated metrics, the median values are either comparable to- or notably lower than those in the official benchmarks. Indicating a strong general performance.
 One potential reason as to why pyannote seems to perform better on these meetings, is the relative simple structure of the meetings. There is not too much overlapping speech and speakers generally are speaking through good microphones.
 
@@ -601,7 +625,8 @@ Second is the sliding window approach used. Long meetings easily contain several
 
 
 \section{Search engine}\label{sec:searchEngineExp}
-To Answer the main research question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? and the subquestion \textit{how well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed}?, I gathered 10 participants and tasked them to find the answer to five questions using five different search methods.
+In this section, the developed methods for research question 4 and 5 are evaluated. The implementation that is to be evaluated is directly embedded in the final search engine. Thus, this section indirectly also provides an evaluation to the implementation of the main research question, \textit{How can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}?
+To do this, I gathered 13 participants and tasked them to find the answer to five questions using five different search methods.
 
 \begin{enumerate}
     \item The contemporary way, scrolling through the video and using its agenda points;
@@ -611,7 +636,9 @@ To Answer the main research question \textit{how can AI be utilized in order to 
     \item Using the chat function.
 \end{enumerate}
 
-For each participant, the search methods were randomly mapped to a question. The participants had three minutes to answer each question. In the scenario where a satisfactory answer is not found within the given time, the search is aborted and this is noted.
+For each participant, the search methods were randomly mapped to a question. 
+The participants first received a breakdown of the search engine, explaining how everything works. Then, they got some practice time to get familiar with the tools.
+Then, when they felt comfortable with the search engine, the participants had three minutes to answer each question. In the scenario where a satisfactory answer is not found within the given time, the search is aborted and this is noted.
 
 The questions were:
 \begin{enumerate}
@@ -624,16 +651,17 @@ The questions were:
 
 \begin{figure}
     \centering
-    \includegraphics[width=0.90\textwidth]{images/search_methods_box_plot.png}
+    \includegraphics[width=0.98\textwidth]{images/search_methods_box_plot.png}
     \caption{search engine results}
     \label{fig:engineResults}
 \end{figure}
 
-Figure \ref{fig:engineResults} shows the results of this experiment, disregarding the search attempts where an answer was not found in time. Observing these results, it can be concluded that the contemporary method of scrolling through the video is by far the least efficient. On top of the fact that the average search time is almost three times as slow as the second slowest method, in 70\% of the cases, a valid answer was not found within the given three minutes.
+Figure \ref{fig:engineResults} shows the results of this experiment, disregarding the search attempts where an answer was not found in time. 
+Observing these results, it can be concluded that the contemporary method of scrolling through the video is by far the least efficient. On top of the fact that the average search time is almost three times as slow as the second slowest method, in 69\% of the cases, a valid answer was not found within the given three minutes.
 
 The three Weaviate search methods all performed roughly equal, with BM25 taking the lead. As can be seen, vector search brought a higher degree of variability with it. Despite this variability, the interquartile range is not remarkably high compared to the other Weaviate search methods. 
 
-On the surface the chat functionality seems to work the quickest. However, this could have something to do with the specific questions asked. For about 20\% of the participants, the chat functionality could not give a valid answer. This is because if the answer to the questions is not among the top results returned by Weaviate, the LLM will not be capable of answering the question. In some cases, the LLM even hallucinated an answer, thinking it was correct despite this not being the case. 
+On the surface the chat functionality seems to work the quickest. However, this could have something to do with the specific questions asked. For about 23\% of the participants, the chat functionality could not give a valid answer. This is because if the answer to the questions is not among the top results returned by Weaviate, the LLM will not be capable of answering the question. In some cases, the LLM even hallucinated an answer, thinking it was correct despite this not being the case. 
 In the prompt the LLM is tasked to answer that it does not know something if the information is not in the provided context. Sometimes, this instruction is not properly followed and the LLM will make up an answer.
 Unfortunately, it is not easily detectable when an answer is a hallucination or true. Thus, one should not rely without second thought on answers given by the chat bot. When receiving a response, the answer should always be verified.
 
