@@ -40,6 +40,7 @@ This law is applicable to all governmental bodies, from the house of representat
 
 Various online tools such as the official Woo-index \footnote{https://organisaties.overheid.nl/woo} and Woogle \footnote{https://woogle.wooverheid.nl} offer the ability to search through a wide range of uploaded documents and information. 
 Though millions of documents are already published and searchable, the searchability of one important type of information is lacking; the meetings. Decisions, from large to small, are made during long meetings which are livestreamed and archived. These video archives, often three to four hours long, not only require vast amounts of storage, they are also difficult to comb through. 
+
 Imagine a journalist writing an article about a new piece of legislation that was, among other things, debated the night before by the local municipality. They want to write what the different parties think of the bill and how they voted. Currently, they would have to watch or skip through to video until they find the part where they talk about the proposed law. Then, they would have to watch the debate and take notes on what each Representative argued, along with their arguments.  Understandably, this simple sounding process quickly becomes both time consuming and inefficient. 
 \\ \\
 This research provides a solution to this issue by answering the question \textit{how can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}? In order to land at a satisfying answer to this research question, some related questions need to be answered first. 
@@ -62,13 +63,16 @@ In summary, the research questions this thesis aims to answer are:
 
 
 \chapter{Related work}
-The act of archiving and transcribing parliamentary meetings is not new. Most big governmental organisations such as the European Parlemen \footnote{https://www.europarl.europa.eu/plenary/nl/debates-video.html} and the Dutch House of Representatives \footnote{https://debatdirect.tweedekamer.nl/} host an online archive that offers an elementary search mechanism. 
-These online archives offer a pleasant viewing experience, showing the current speaker and what is being said. Most of the time, the active speaker is not automatically detected, but the information is taken from the currently active microphone, which is linked to a person. Occasionally, this results in an incorrect speaker being highlighted when the speaker speaks through a different microphone than they were assigned.
+The act of archiving and transcribing parliamentary meetings is not new. Most big governmental organisations such as the European Parlement \footnote{https://www.europarl.europa.eu/plenary/nl/debates-video.html} and the Dutch House of Representatives \footnote{https://debatdirect.tweedekamer.nl/} host an online archive that offers an elementary search mechanism. 
+These online archives of large governmental institutions offer a pleasant viewing experience, showing the current speaker and what is being said. Most of the time, the active speaker is not automatically detected, but the information is taken from the currently active microphone, which is linked to a person. Occasionally, this results in an incorrect speaker being highlighted when the speaker speaks through a different microphone than they were assigned.
 On top of this, the search functionalities that these existing archives offer is often limited to a naive keyword search comparable to a control+f search, or they offer no searching at all.
+For large institutions, manually transcribing meetings and hosting a naive search engine might not be a problem. For the hundreds of small local municipalities however, this is just not feasible in terms of costs and required manpower. At the moment of writing, a cheap, yet effective system that offers archiving-, transcribing- and searching services on long governmental video archives is not publicly available.
+
+% TODO: dieper zoeken naar overheid/ parlement zoeksystemen in videos enzo - italiaans parlement?
 
 Some proprietary tools such as fireflies \footnote{https://fireflies.ai/} and tactiq \footnote{https://tactiq.io/} provide users the ability to search specifically through (AI generated) meeting notes. The main purpose of these tools generally is the generation of notes, not the searching. As a result, the search mechanism is a simple keyword search, showing all text snippets containing the given query. 
 
-Stepping away from searching through meeting video archives,previous studies have explored the searching of video archives containing online lectures. The majority of these studies use a combination of transcripts and optical character recognition (OCR) obtain relevant search results, leveraging the fact that on-screen text has a high probability of being relevant to the discussed subject \cite{Adcock10, yang14}. 
+Stepping away from searching through meeting video archives, previous studies have explored the searching of video archives containing online lectures. The majority of these studies use a combination of transcripts and optical character recognition (OCR) obtain relevant search results, leveraging the fact that on-screen text has a high probability of being relevant to the discussed subject \cite{Adcock10, yang14}. 
 Unfortunately, this approach won't work for searching through parliamentary meetings since these meetings held without an accompanying screen that is showing information. 
 
 \chapter{Theoretical background}
@@ -535,7 +539,7 @@ This normalisation removes all non-alphabetical characters and converts all text
 \begin{figure}
     \centering
     \includegraphics[width=0.85\textwidth]{images/whisperBench.png}
-    \caption{Whisper transcription WER results}
+    \caption{Whisper ASR Performance on Municipality Meetings. This figure displays the Word Error Rate (WER) for Whisper across various meetings. The data, comprising 40 minutes of manually transcribed audio from seven different meetings spanning five years and three municipalities, was normalized to remove non-alphabetical characters and convert text to lowercase. Results show WER for regular meetings is consistent with Whisper benchmarks presented in \cite{radford2023robust}. Notably, WER is higher for Zoom meetings, likely due to varied audio quality from different devices and microphones used by participants.}
     \label{fig:whisperExperiment}
 \end{figure}
 
@@ -546,7 +550,7 @@ Another cause for error is when a speaker speaks quickly, without perfect articu
 An example of such a situation where Whisper gets confused, is visualized in figure \ref{fig:whisperResultWERVis1}. In this figure, green text represents a substitution, while red text represents a deletion. The snippet of text is taken from a 2019 Haarlem meeting, with code $622012$, starting at 01:47:10. Here, the speaker is not clearly understandable, resulting in a transcription not making the most sense. 
 Luckily, these situations are not very common, as evidenced by the global WER given in figure \ref{fig:whisperExperiment}.
 
-\begin{figure}[htbp]\caption{Visualization of WER where green represents a substitution and red a deletion.}\label{fig:whisperResultWERVis1}
+\begin{figure}[htbp]\caption{Visual example of Whisper ASR WER Analysis. This figure visualizes the WER for a snippet from a 2019 Haarlem meeting (code 622012) starting at 01:47:10. The Whisper generated reference transcription is compared with a manual transcription. Green text indicates substitutions, where a word in the hypothesis replaces a word in the reference. Red text indicates deletions, where words present in the reference are missing in the hypothesis. This example contains a fast, unclear speech, resulting in some transcription errors, with specific substitutions and deletions highlighted.}\label{fig:whisperResultWERVis1}
     \centering
 \begin{Verbatim}[commandchars=\\\{\}]
 reference: ... ben ik toch een beetje benieuwd naar de reactie van het college. 
@@ -587,7 +591,7 @@ One thing that stands out however, is the addition of two very short speaking tu
         \caption{Manual diarisation}
         \label{fig:subfigb}
     \end{subfigure}
-    \caption{Manual diarisation versus pyannote diarisation}
+    \caption{Comparison of pyannote and Manual Diarisation for a Ridderkerk Meeting. This figure compares the pyannote.audio diarisation (a) with a manual diarisation (b) for a meeting in Ridderkerk, 2022 (code 938576), starting at 00:41:10. The graphs show overall agreement between the two methods, with minor, expectable discrepancies at the start and end points of speaking turns.}
     \label{fig:manvspyan}
 \end{figure}
 
@@ -597,7 +601,7 @@ A collar is a margin of time around each speaker turn boundary. A 250 millisecon
 \begin{figure}
     \centering
     \includegraphics[width=0.98\textwidth]{images/error_rates_box_plots.png}
-    \caption{pyannote speaker diarisation results}
+    \caption{Comparison of diarisation errors for pyannote.audio across different collar sizes (0 ms, 250 ms, 500 ms). Data were collected from over 30 minutes of annotated meetings, distributed over five different meetings from four municipalities spanning three years. }
     \label{fig:pyanExperiment}
 \end{figure}
 
@@ -608,21 +612,21 @@ For all evaluated metrics, the median values are either comparable to- or notabl
 One potential reason as to why pyannote seems to perform better on these meetings, is the relative simple structure of the meetings. There is not too much overlapping speech and speakers generally are speaking through good microphones.
 
 \section{Agenda point segmentation}
-Some meetings already had their agenda points labeled. By using these pre-labeled agenda points as a ground truth, I tested the created topic segmentation script described in section \ref{sec:agendapoints}, thus answering research question 3.
+Some meetings already had their agenda points uploaded and available in the archive. By using these pre-labeled agenda points as a ground truth, I tested the created topic segmentation script described in section \ref{sec:agendapoints}, thus answering research question 3.
 
-I ran the segmentation script on 10 different meetings, using their provided agenda points as a ground truth. Next, I counted the number of missed agenda points and the number of false agenda points.
+I ran the segmentation script, represented in algorithm \ref{alg:topic}, on 10 different meetings over two years, using their provided agenda points as a ground truth. Next, I counted the number of missed agenda points and the number of false agenda points.
 
-\begin{figure}
-    \centering
-    \includegraphics[width=0.85\textwidth]{images/topicSegmentation.png}
-    \caption{Agenda point segmentation results}
-    \label{fig:agendaSegmResults}
-\end{figure}
+The disappointing results from figure \ref{fig:agendaSegmResults} indicate that the developed method of automatic topic segmentation in these types of government meetings is not sufficient yet. Based on the already available agenda points, a meeting has about nine agenda points on average. This information makes the results from figure \ref{fig:agendaSegmResults} even poorer. Although most true agenda points are labeled, a false positive rate of 5 topics per meeting, or more than 50\% on average, is just unacceptable.
 
-The disappointing results from figure \ref{fig:agendaSegmResults} indicate that the developed method of automatic topic segmentation in these types of government meetings is not sufficient yet. 
 Besides the uninspiring accuracy results, there are some other hurdles preventing topic segmentation from succeeding. One is the limited context window described in section \ref{sec:agendapoints}. 
 Second is the sliding window approach used. Long meetings easily contain several thousand spoken sentences, all of which need to be fed to the LLM separately. Even with heavy optimization such as combining sentences, a single video can easily take multiple hours to process.
 
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.85\textwidth]{images/topicSegmentation.png}
+    \caption{Evaluation of automatic agenda point segmentation accuracy. The figure displays the performance of an automatic topic segmentation script tested on 10 different government meetings, distributed over two years. The evaluation, based on the number of missed and false agenda points compared to pre-labeled ground truth, reveals significant deficiencies: the segmentation method produced a false positive rate of more than 50\%, identifying approximately five incorrect topics per meeting. These results highlight the current limitations of the method, including the restricted context window and the inefficiency of the sliding window approach, which contributes to lengthy processing times.}
+    \label{fig:agendaSegmResults}
+\end{figure}
 
 \section{Search engine}\label{sec:searchEngineExp}
 In this section, the developed methods for research question 4 and 5 are evaluated. The implementation that is to be evaluated is directly embedded in the final search engine. Thus, this section indirectly also provides an evaluation to the implementation of the main research question, \textit{How can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils}?
@@ -652,7 +656,7 @@ The questions were:
 \begin{figure}
     \centering
     \includegraphics[width=0.98\textwidth]{images/search_methods_box_plot.png}
-    \caption{search engine results}
+    \caption{omparison of Search Method Efficiency and Variability. The figure shows the average search times and variability for five search methods used by 13 participants to answer questions from video archives. Each participant was randomly assigned a search method for each question, and searches were conducted within a three-minute time limit. BM25 search was the most efficient among Weaviate methods, while the contemporary method of scrolling through video was the least efficient, failing to find an answer within the time limit 69\% of the time. Despite the chat function being the fastest on average, it struggled with validity, giving incorrect answers 23\% of the time.}
     \label{fig:engineResults}
 \end{figure}
 
