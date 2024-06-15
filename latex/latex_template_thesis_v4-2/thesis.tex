@@ -40,7 +40,7 @@ One of the foundations of a strong democracy is transparency. Citizens must have
 This law is applicable to all governmental bodies, from the house of representatives to local municipalities to the tax authority. The three most important terms the Woo brings are: \textit{active publication}, stating government bodies should actively publish some types of information. \textit{Publication on request} states that information should be made public on request. Lastly, the \textit{information management obligation} states that all this information should be easily accessible. 
 
 Various online tools such as the official Woo-index \footnote{https://organisaties.overheid.nl/woo} and Woogle \footnote{https://woogle.wooverheid.nl} offer the ability to search through a wide range of uploaded documents and information. 
-Though millions of documents are already published and searchable, the searchability of one important type of information is lacking; the meetings. Decisions, from large to small, are made during long meetings which are livestreamed and archived. These video archives, often three to four hours long, not only require vast amounts of storage, they are also difficult to comb through. 
+Though millions of documents are already published and searchable, the searchability of one important type of information is lacking; the meetings. Decisions, from large to small, are made during long meetings which are livestreamed and archived. These video archives, often three to four hours long, not only require vast amounts of storage, they are also difficult to comb through. For large institutions, manually transcribing meetings and hosting a naive search engine might not be a problem. For the hundreds of small local municipalities however, this is just not feasible in terms of costs and required manpower.
 
 Imagine a journalist writing an article about a new piece of legislation that was, among other things, debated the night before by the local municipality. They want to write what the different parties think of the bill and how they voted. Currently, they would have to watch or skip through to video until they find the part where they talk about the proposed law. Then, they would have to watch the debate and take notes on what each Representative argued, along with their arguments.  Understandably, this simple sounding process quickly becomes both time consuming and inefficient. 
 \\ \\
@@ -64,17 +64,19 @@ In summary, the research questions this thesis aims to answer are:
 
 
 \chapter{Related work}
-The act of archiving and transcribing parliamentary meetings is not new. Most big governmental organisations such as the European Parlement \footnote{https://www.europarl.europa.eu/plenary/nl/debates-video.html} and the Dutch House of Representatives \footnote{https://debatdirect.tweedekamer.nl/} host an online archive that offers an elementary search mechanism. 
-These online archives of large governmental institutions offer a pleasant viewing experience, showing the current speaker and what is being said. Most of the time, the active speaker is not automatically detected, but the information is taken from the currently active microphone, which is linked to a person. Occasionally, this results in an incorrect speaker being highlighted when the speaker speaks through a different microphone than they were assigned.
-On top of this, the search functionalities that these existing archives offer is often limited to a naive keyword search comparable to a control+f search, or they offer no searching at all.
-For large institutions, manually transcribing meetings and hosting a naive search engine might not be a problem. For the hundreds of small local municipalities however, this is just not feasible in terms of costs and required manpower. At the moment of writing, a cheap, yet effective system that offers archiving-, transcribing- and searching services on long governmental video archives is not publicly available.
+The practice of archiving and transcribing parliamentary meetings is nothing new. Major governmental organisations such as the European Parliament \footnote{https://www.europarl.europa.eu/plenary/nl/debates-video.html} and the Dutch House of Representatives \footnote{https://debatdirect.tweedekamer.nl/} maintain an online archive with basic search functionalities. 
+These archives typically provide an engaging user experience by displaying the current speaker and their spoken content. However, the identification of the active speaker often relies on the microphone in use and its assignee, which can lead to inaccuracies when the speaker uses a different microphone than assigned.
+Despite the presence of these archives, the search capabilities are often rudimentary, limited to basic keyword searches akin to a simple control+f functionality, or in some cases, no search functionality is provided at all.
 
-% TODO: dieper zoeken naar overheid/ parlement zoeksystemen in videos enzo - italiaans parlement?
+In December 2021, students at the University of Washington published the Council Data Project (CDP), an open source municipal data collection tool that includes both front-end and back-end components for searching archived meeting transcripts \cite{Brown2021Council}. 
+The CDP primarily focuses on extracting data from municipal archives and employs keyword-based probabilistic information retrieval techniques. However, apart from automatic transcription, the CDP does not utilize machine learning to enhance search functionality.
 
-Some proprietary tools such as fireflies \footnote{https://fireflies.ai/} and tactiq \footnote{https://tactiq.io/} provide users the ability to search specifically through (AI generated) meeting notes. The main purpose of these tools generally is the generation of notes, not the searching. As a result, the search mechanism is a simple keyword search, showing all text snippets containing the given query. 
+More recently, in 2023, Italian researchers at the University of Rome developed a system leveraging transcription- and speaker diarisation AI models to process video recordings of Italian Parliament meetings \cite{bertillo2023enhancing}.  This work emphasizes the automation of creating indices but does not offer an extensive search system for the processed video content.
 
-Stepping away from searching through meeting video archives, previous studies have explored the searching of video archives containing online lectures. The majority of these studies use a combination of transcripts and optical character recognition (OCR) obtain relevant search results, leveraging the fact that on-screen text has a high probability of being relevant to the discussed subject \cite{Adcock10, yang14}. 
-Unfortunately, this approach won't work for searching through parliamentary meetings since these meetings held without an accompanying screen that is showing information. 
+Beyond governmental video archives, prior research has explored the searching of video archives of online lectures. The majority of these studies typically employ a combination of transcript generation and optical character recognition (OCR) to obtain relevant search results, exploiting the fact that on-screen text has a higher probability of being relevant to the presently discussed subject \cite{Adcock10, yang14}. 
+However, this approach is not applicable to parliamentary meetings, which generally do not feature on-screen informational text that can be exploited. 
+
+In summary, while existing research has individually addressed AI-based information extraction from governmental meeting archives and search tools for transcribed content, an integrated system combining comprehensive meeting processing with AI-driven search capabilities remains missing.
 
 \chapter{Theoretical background}
 
@@ -139,7 +141,6 @@ remarkably, these vector representations contain an embedded meaning of the word
 \subsection{Contextual feature vectors}
 
 Since the end of the 2010's, the implementation of Word2vec is not considered state-of-the-art anymore, being replaced by BERT \cite{devlin19} and GPT \cite{brown20}. The introduction, and consequent improvements of the transformer model shifted the focus in NLP to the utilization of these transformer models. Transformer models are like regular neural networks, but add several so called 'attention layers', allowing words to be processed in relation to all other words in the sequence, taking the specific context into account \cite{vaswani17, vondermosel22}.
-% TODO: meer uitleggen over contextual en trasnformers, dit is wat ik gebruik, MPnet paper aanhalen 
 
 \section{Information retrieval} \label{retrievalSection}
 According to current Director of the Stanford Artificial Intelligence Laboratory Christopher Manning, information retrieval can be defined as: 
@@ -669,11 +670,11 @@ Then, when they felt comfortable with the search engine, the participants had th
 
 The questions were:
 \begin{enumerate}
-    \item Wat is de belangrijkste reden die wordt gegeven voor het uitstellen van de harmonisatie van buitensport?
-    \item Wat zijn de verwachte voordelen van het installeren van tuintjes rondom ondergrondse containers?
-    \item Wat is het verschil tussen het eerste- en het tweede speelterreintje?
-    \item Hoe laat wordt de inspreker gewekt door de bromtonen van de nabijliggende windmolens?
-    \item Wat is het doel van het voorstel met betrekking tot de gemeenschappelijke regeling van de bedrijfsvoeringspartner?
+    \item What was the main reason given for the delay in the harmonising of outdoor sports?
+    \item What are the expected advantages to the installation of the gardens surrounding underground trash containers?
+    \item What is the difference between the first and second playgrounds?
+    \item How late is the guest speaker awoken by the humming sound of nearby windmills?
+    \item What is the goal of the proposal with regards the the 'gemeenschappelijke regeling van de bedrijfsvoeringspartner'?
 \end{enumerate}
 
 \begin{figure}
