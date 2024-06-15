@@ -10,6 +10,7 @@
 \usepackage{xcolor}
 \usepackage{subcaption}
 \usepackage{graphicx}
+\usepackage{commath}
 
 % Citations
 \usepackage[style=numeric]{biblatex}
@@ -185,11 +186,25 @@ Another model facilitating ranked retrieval is the probabilistic model. Central 
 \say{If a reference retrieval system’s response to each request is a ranking of the documents in the collection in order of decreasing probability of relevance to the user who submitted the request, where the prob- abilities are estimated as accurately as possible on the basis of what- ever data have been made available to the system for this purpose, the overall effectiveness of the system to its user will be the best that is obtainable on the basis of those data.} \cite{robertson1977probability}
 
 The main challenge of probabilistic information retrieval, is finding a ranking function that efficiently provides an accurate ranking of documents in a collection. 
-% TODO over Binary Independence Model
+
+Central to most probabilistic information retrieval approaches, is the Binary Independence Model. It assumes that a term $q_{i}$ in a document is either present ($1$), or absent ($0$). With this assumption, a search term weight can be computed. While many different weight equations exist, the Inverse Document Frequency (IDF) (equation \ref{eq:idf}) is used most often.
+Here, $N$ is the total number of documents, while $n(q_{i})$ is the number of documents containing search term $q_{i}$ \cite{Robertson09}. 
+
+\begin{equation}\label{eq:idf}
+    IDF(q_{i}) = \ln{\frac{N - n(q_{i}) + 0.5}{n(q_{i}) +0.5} + 1}
+\end{equation}
 
 \subsubsection{Okapi BM25}
-TODO
+Okapi BM25, often referred to simply as BM25, is a high performing ranking function ranking documents based on their relevance to a given search query, dating back to the 70s. It builds upon the Binary Independence Model and incorporates various refinements, allowing for cheap and accurate document scoring.
+BM25's ranking function (equation \ref{eq:okapi}) scores each document in a collection for a query by taking into account the frequency of query terms within the document and the document's length \cite{Robertson09, manning08IR}.
 
+\begin{equation}\label{eq:okapi}
+    score(D, Q) = \sum^{n}_{i=1} IDF(q_{i}) \cdot \frac{f(q_{i}, D) \cdot (k_{1}+1)}{f(q_{i}, D)+k_{1} \cdot (1-b+b \cdot (\abs{D}/avgdl)}
+\end{equation}
+
+Here, $D$ and $Q$ are the document and query containing $q_{1}, ..., q_{n}$ respectfully. $f(q_{i}, D)$ is the frequency of a term $q_{i}$ in document $D$. $\abs{D}$ is the document length, and $avgdl$ is the average document length in the collection. $IDF(q_{i})$ is the inverse document frequency weight of search term $q_{i}$. Lastly, $k_1$ and $b$ are parameters, usually set to $1.2$ and $0.75$ respectfully.
+
+Due to the simplicity and effectiveness BM25 brings, it is still widely used in digital libraries, search engines and other information retrieval systems \cite{Robertson09}.
 
 \subsection{Vector databases}
 Vector databases are a relatively new technology that offer a storage and retrieval mechanism optimized for enormous amounts of data, often capable of querying hundreds of millions of documents with only milliseconds latency. 
@@ -601,7 +616,7 @@ A collar is a margin of time around each speaker turn boundary. A 250 millisecon
 \begin{figure}
     \centering
     \includegraphics[width=0.98\textwidth]{images/error_rates_box_plots.png}
-    \caption{Comparison of diarisation errors for pyannote.audio across different collar sizes (0 ms, 250 ms, 500 ms). Data were collected from over 30 minutes of annotated meetings, distributed over five different meetings from four municipalities spanning three years. }
+    \caption{Comparison of diarisation errors for pyannote.audio across different collar sizes (0 ms, 250 ms, 500 ms). Data were collected from over 30 minutes of annotated meetings, distributed over five different meetings from four municipalities spanning three years. The graph shows similar, if not slightly improved results from the official benchmarks in figure \ref{fig:pyanres}.}
     \label{fig:pyanExperiment}
 \end{figure}
 
