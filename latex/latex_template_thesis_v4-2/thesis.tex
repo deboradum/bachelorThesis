@@ -167,13 +167,13 @@ Due to the fact that boolean queries lack the ability the rank returned results,
 \subsection{Algebraic information retrieval}
 The algebraic model facilitates ranked retrieval, in which there is a collection of documents (the corpus), the user issues a query, and a ranked list of documents relevant to the query is returned.
 
-Assume the collection of documents has been pre-processed and indexed into many vectors as described in section \ref{}. Recall that semantically similar words and sentences lie closer in vector space than semantically dissimilar text. Given this fact, similar documents will naturally lie close to each other. Additionally, embedded queries that are relevant to specific documents, will be embedded relatively close to these relevant documents, meaning the measure of similarity between two vectors can function as a ranking score.
+Assume the collection of documents has been pre-processed and indexed into many vectors. Recall that semantically similar words and sentences lie closer in vector space than semantically dissimilar text. Given this fact, similar documents will naturally lie close to each other. Additionally, embedded queries that are relevant to specific documents, will be embedded relatively close to these relevant documents, meaning the measure of similarity between two vectors can function as a ranking score.
 
 The two most popular ranking functions are \textit{Euclidean distance} and \textit{cosine similarity}. Euclidean distance is a widely used metric in clustering problems, measuring the distance between two points in space. Equation \ref{eq:eucDist} gives the general formula for calculating the euclidean distance between two vectors $\textbf{V}$ and $\textbf{W}$ of dimension $n$. \cite{huang2008similarity}
 \begin{equation}\label{eq:eucDist}
     D(\textbf{V}, \textbf{W}) = \sqrt{\sum_{i=1}^{n} (V_{i} - W_{i})^{2}}
 \end{equation}
-Cosine similarity, given in in equation \ref{}, is more popular in textual document information retrieval systems. It is not a metric of distance, but how similar two vector represented documents are. Similarity here, is seen as the angle between two vectors. Thus, unlike Euclidean distance, the difference in magnitude of two vectors has no influence on the metric. \cite{huang2008similarity, rahutomo2012semantic, manning08IR}
+Cosine similarity, given in in equation \ref{eq:cossim}, is more popular in textual document information retrieval systems. It is not a metric of distance, but how similar two vector represented documents are. Similarity here, is seen as the angle between two vectors. Thus, unlike Euclidean distance, the difference in magnitude of two vectors has no influence on the metric. \cite{huang2008similarity, rahutomo2012semantic, manning08IR}
 \begin{equation}\label{eq:cossim}
     S(\textbf{V}, \textbf{W}) = \frac{\textbf{V} \cdot \textbf{W}}{\lvert \textbf{V} \rvert \times \lvert \textbf{W} \rvert}
 \end{equation}
@@ -211,10 +211,18 @@ Vector databases are a relatively new technology that offer a storage and retrie
 These remarkable results are achieved by the use of approximate nearest neighbor (ANN) algorithms, offering some accuracy for for a large speed gain \cite{han2023comprehensive}. 
 
 \subsubsection{Hierarchical Navigable Small World graphs}
-One of the most employed ANN algorithms is Hierarchical Navigable Small World graphs (HNSW) \cite{malkov2018efficient}. This proximity graph based algorithm is TODO
+One of the most employed ANN algorithms is Hierarchical Navigable Small World graphs (HNSW) \cite{malkov2018efficient}. 
+This proximity graph based algorithm works on multi-layered graphs, where deeper layers contain more data points and where the deepest layer contains every data point. At query time, the algorithm efficiently navigates these layers to find the approximate nearest neighbors. The process begins at the highest layer, containing fewer data points. In this layer, the closest matching data points are found, after which the nearest neighbors in the layer below are found. This process repeats until the nearest neighbors in the deepest layer have been found. Since there are relatively few data points in the higher layers, many unrelated data points will never be processed, resulting in a quick and efficient search \cite{Malkov2014Approximate}.
+
+\begin{figure}[h]
+    \centering
+    \includegraphics[width=0.4\textwidth]{images/hnsw2.png}
+    \caption{A simple Hierarchical Navigable Small World vector search diagram. At each layer, the closest data point is found, resulting in a final best match in the deepest layer.}
+    \label{fig:hnsw}
+\end{figure}
 
 \subsubsection{Hybrid search}
-Many vector databases allow for a combination between ANN powered vector similarity search and probabilistic searches. TODO
+Generally speaking, dense vector search specialises in the semantic meaning of the search terms, while a keyword search such as BM25 focuses on the search terms themselves and their relative frequency. Many vector databases allow for a combination between such vector similarity searches and probabilistic searches, resulting in a hybrid search taking in to account both keyword frequency and semantic meaning. 
 
 
 \section{Video \& audio analysis}
