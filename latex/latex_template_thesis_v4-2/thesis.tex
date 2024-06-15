@@ -19,7 +19,7 @@
 \addbibresource{references.bib}
 
 % Title Page
-\title{AI-Driven Retrieval and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, and Retrieval-Augmented Generation}
+\title{AI-Driven Retrieval and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, and Retrieval Augmented Generation}
 \author{Pepijn van Wijk}
 \supervisors{Dr. Maarten Marx}
 \signedby{Signees}
@@ -248,14 +248,14 @@ From the late seventies onwards, a focus on statistical approaches gained tracti
 One particularly large milestone was the Sphinx-II system, developed in 1992 by, among others, Xuedong Huang at Carnegie Mellon University. Sphinx-II, using an advanced statistical approach, was the first system that had both a large vocabulary, and the ability to perform speaker-independent detection. The Sphinx-II also won DARPA's speech benchmark evaluation in 1992. ASR systems are mainly evaluated by their Word Error Rate (WER) (equation \ref{eq:wer}) \cite{huang1993overview, huang2014historical}.
 
 \begin{equation} \label{eq:wer}
-    WER = \frac{S + D + I}{S + D + C}
+    WER = \frac{S + D + I}{N}
 \end{equation}
 where: \\
 \begin{conditions}
  S     &  the number of substitutions \\
  D     &  the number of deletions \\   
  I     &  the number of insertions \\
- C     &  the number of correct words
+ N     &  the total number of words
 \end{conditions}
 
 Up until the late 2000's, the use of hidden Markov models and similar statistical methods still dominated in the ASR space. However, with the advent of deep neural networks (DNNs) and the aforementioned transformer architecture, the paradigm has shifted yet again, bringing light the the current state-of-the-art: OpenAI's Whisper ASR.
@@ -291,7 +291,7 @@ Speaker diarisation (SD) is the process of partitioning input audio containing m
 Central to speaker diarisation is voice profile feature extraction. When a reliable and accurate method of embedding voice profiles is achieved, these voice profile vectors can be compared using similarity measures such as cosine similarity or euclidean distance to find different speakers and when they speak. Different systems utilize different methods of obtaining feature vectors. Most of these feature extractors use various representations of sound waves, with additional features derived from pitch information and audio metadata, mostly from the standardised MPEG-7 audio standard \cite{kotti2008speaker, lu2002speaker}. Some of the most common features have a similar accuracy, Mel-frequency cepstral coefficients
 (MFCCs) \cite{gook04} and Line spectral pairs (LSPs) \cite{lu2002speaker}. 
 
-\subsection{Pyannote}\label{sec:pyannote}
+\subsubsection{Pyannote}\label{sec:pyannote}
  Pyannote.audio (pyannote) is the current state-of-the-art speaker diarisation mode. It is not only a speaker diarisation model, but it also offers a range of speaker diarisation sub-modules. These submodules include voice activity detection, overlapped detection speech, speaker change detection, and more. \cite{bredin2020pyannote, bredin2023pyannote}
 
 In most competitions, speaker diarisation accuracy is graded by four criteria: speaker confusion rate (CONF), which is the duration of speaking where the speaker is mislabeled, false alarm rate (FALSE), which is the duration of non-speech incorrectly classified as speech, missed detection (MISS), which is the duration of speech that is incorrectly classified as non-speech and Diarisation Error Rate (DER), which is a combination of the first three. As can be seen from figure \ref{fig:pyanres}, pyannote scores at the top of most benchmarks. Top benchmarks are greatly improved by their preview baseline, while DERs on benchmarks where pyannote does not score at the top are fairly close, indicating a great overall performance. \cite{bredin2023pyannote}
@@ -484,11 +484,15 @@ A pseudocode representation of this algorithm is presented in \ref{alg:topic}.
 \end{algorithm}
 
 \section{Information retrieval}\label{sec:weaviate}
-For question four, \textit{What state-of-the-art information retrieval techniques can be leveraged to develop an efficient video information retrieval system}?, a Weaviate vector database Python client has been built.
+For research question four, \textit{What state-of-the-art information retrieval techniques can be leveraged to develop an efficient video information retrieval system}?, a Weaviate vector database Python client has been built.
 The created Weaviate client allows the user to easily perform simple operations such as creating and deleting collections (similar to tables in relational databases), inserting and deleting entries and getting collection metadata. 
 Besides these basic operations, three search methods described in section \ref{retrievalSection} have been implemented: Vector search, BM25 search and Hybrid search.
 
 All search methods allow the user to specify filter parameters such as government, year, speaker and more. Invariant of employed the search method, the client returns data in a uniform format—an array of relevant result objects. Each result object within this array includes properties such as meeting ID, government, year, etc., the result's UUID, its vector representation, and its relevance score.
+
+The Weaviate database consists of two different collections: \textit{Transcripts} and \textit{Speakers}. The \textit{Transcripts} collection is organised by uninterrupted speaking turns of individuals. Each entry within this collection is linked to the embedding of the content of this speaking turn, as well as to the voice profile embedding of the speaker.
+The \textit{Speakers} collection is indexed by voice profile embeddings. This collection associates each voice profile with a corresponding speaker's name, providing the web application the ability to map each speaking turn to the correct speaker's identity.
+
 
 \section{RAG chat bot}
 
