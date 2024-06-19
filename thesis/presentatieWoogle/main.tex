@@ -1,0 +1,130 @@
+%-------------------------------------------------------------------------------
+% LATEX TEMPLATE PRESENTATIE
+%-------------------------------------------------------------------------------
+% Dit template is voor gebruik door studenten van de de bacheloropleiding 
+% Informatica van de Universiteit van Amsterdam.
+% Voor informatie over presenteren, zie 
+%                               https://practicumav.nl/presenteren/index.html
+%
+%-------------------------------------------------------------------------------
+%	PACKAGES EN CONFIGURATIE
+%-------------------------------------------------------------------------------
+% Gebruik de optie "sidebar" voor toevoeging van een sidebar met inhoudsopgave
+% en de optie "dyslexic" voor gebruik van het OpenDyslexic-lettertype
+\documentclass[aspectratio=169,sidebar]{uva-inf-presentation}
+\usepackage[english]{babel}
+\usepackage{listings}
+
+% Vul hieronder de gevraagde gegevens in, 
+% meerdere auteurs en UvAnetID's gescheiden door een puntkomma 
+\title{AI-Driven Retrieval and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, and Retrieval Augmented Generation} 
+\authors{Pepijn van WIjk}
+\uvanetids{13952072}
+\course{Bachelor thesis}
+\tutor{}
+\docent{Dr. Maarten Marx} 
+\group{}
+\programme{Informatica}
+
+\begin{document}
+%-------------------------------------------------------------------------------
+%	AUTOMATISCHE SLIDES
+%-------------------------------------------------------------------------------
+\begin{titelframe}
+\titlepage
+\end{titelframe}
+
+\begin{titelframe}\frametitle{Contents}
+\tableofcontents
+\end{titelframe}
+
+%-------------------------------------------------------------------------------
+%	PRESENTATIE SLIDES
+%------------------------------------------------------------------------------
+
+\section{Problem}
+\begin{frame}{Problem}
+    \begin{itemize}
+        \item Wet Open Overheid
+        \item Tweede Kamer publishes reports
+        \item Difficult for hundreds of local governments
+        \item journalist writing about a local meeting decision
+    \end{itemize}
+\end{frame}
+
+\section{Solution}
+\begin{frame}{Solution}
+    \begin{itemize}
+        \item Automatic archiving tool
+        \item Automatic analysis of meetings
+        \begin{itemize}
+            \item Transcription
+            \item Speaker diarisation
+        \end{itemize}
+        \item Transcript search engine
+        \item Conversation-style chat bot
+        \item Easy navigable web application
+    \end{itemize}
+\end{frame}
+
+\section{Methodology}
+\begin{frame}\frametitle{Architecture}
+
+\end{frame}
+
+\begin{frame}\frametitle{Architecture - scraper}
+
+\end{frame}
+
+\begin{frame}\frametitle{Scraper}
+\begin{itemize}
+    \item iBabs \& NotuBiz
+    \item Downloads video 
+    \item Downloads agenda when available
+    \item Organizes archive based on year and meeting type
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Architecture}
+
+\end{frame}
+
+\begin{frame}\frametitle{Architecture - analysis}
+
+\end{frame}
+
+\begin{frame}\frametitle{Analysis pipeline}
+\begin{itemize}
+    \item
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Architecture}
+
+\end{frame}
+
+\section{Demo}
+\begin{frame}\frametitle{Demo}
+\end{frame}
+
+\section{Results}
+\begin{frame}\frametitle{Results}
+
+\end{frame}
+
+\section{Conclusion}
+\begin{frame}\frametitle{Conclusion}
+\begin{itemize}
+    \item Hard to navigate and find through multi-hour long municipal meetings
+    \begin{itemize}
+        \item Automatic iBabs \& NotuBiz scrape tools
+        \item Speaker diarisation \& automatic speech recognition
+        \item Semantic- and keyword search engine
+        \item Chat bot
+        \item Online search application
+    \end{itemize}
+\end{itemize}
+\end{frame}
+
+%-------------------------------------------------------------------------------
+\end{document}
