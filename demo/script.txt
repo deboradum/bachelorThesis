@@ -1,0 +1,34 @@
+Videotulen is an online search engine with the goal of making searching through
+governemnt video archives more simple and accessible.
+
+Videotulen allows you to either search through the entire video archive,
+containing more than 3000 hours of government meetings. When neccessary, search
+results can be filtered on a specific government, meeting type or year.
+
+The main part of Videotulen is searching for information in specific videos in the
+archive. When navigating to a video, you are greeted by a screen showing the video,
+a searchbar, a chat window and, when available, the topics of the meeting.
+
+Below the video, there are two levels showing the speakers and meeting topics.
+When hovering above a bar, the speaker- or topic name is shown, along with the
+video time. When clicking on the grey bar, the video is fast forwarded to that
+point in time.
+
+The search bar below the video allows for three different search types: an AI-based semantic
+search capturing the meaning and context of the query, a keyword search focusing on
+specific terms, or a hybrid between the two.
+
+When a search is made, the database is queried and returns the speaking turns most
+relevant to the query.
+Search results show the speaker, the spoken text and the time in the video. When clicked,
+the video is fast forwarded to the specified time.
+When needed, search results can be filtered down to a specific
+speaker or to a specifc topic.
+
+Lastly there is a chat option, allowing users to ask questions regarding the video in
+a conversational manner. When asking a question, the AI model will receive the question
+and the most relevant context to the question. It will then formulate an answer to the
+question. When no usable context is given, the AI model will tell you the question is not
+answerable with the available context. While this can be a useful feature, current AI
+technology is not yet at a point where hallucinations and mistakes can be 100% prevented.
+Thus, answers from the chat functions should always be verified.
