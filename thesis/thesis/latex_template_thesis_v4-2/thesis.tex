@@ -415,8 +415,8 @@ As mentioned in section \ref{sec:pyannote}, pyannote.audio is the current state-
 
 \begin{lstlisting}[language=Python, caption={Modular speaker diarisation class.}]
 class Diarisor:
-    def diorize(self, input_file, output_file):
-        print("Diarize method not implemented!")
+    def diarise(self, input_file, output_file):
+        print("Diarise method not implemented!")
         return PyannoteReturnCodes.NOT_IMPLEMENTED
 
     def embed(self, input_file, from_time, to_time):
@@ -572,7 +572,7 @@ This normalisation removes all non-alphabetical characters and converts all text
 \end{figure}
 
 as can be seen from figure \ref{fig:whisperExperiment}, the transcription WER in regular meetings is in line with what can be expected from the Whisper benchmarks presented in \cite{radford2023robust} (illustrated in figure \ref{fig:whisperwer}).
-One interesting observation is the large difference between Zoom meetings and regular meetings. For a couple years during the nationwide COVID regulations, the municipality meetings took place online. During these meetings, every participant used their own device and microphone, a general lower audio quality, with large quality differences between different speakers probably contributing to a lower transcription accuracy.
+One interesting observation is the large difference between Zoom meetings and regular meetings. For a couple years during the nationwide COVID regulations, the municipality meetings took place online. During these meetings, every participant used their own device and microphone - a general lower audio quality - with large quality differences between different speakers probably contributing to lower transcription accuracy.
 
 Another cause for error is when a speaker speaks quickly, without perfect articulation. 
 An example of such a situation where Whisper gets confused, is visualized in figure \ref{fig:whisperResultWERVis1}. In this figure, green text represents a substitution, while red text represents a deletion. The snippet of text is taken from a 2019 Haarlem meeting, with code $622012$, starting at 01:47:10. Here, the speaker is not clearly understandable, resulting in a transcription not making the most sense. 
@@ -623,8 +623,8 @@ One thing that stands out however, is the addition of two very short speaking tu
     \label{fig:manvspyan}
 \end{figure}
 
-To address systemic differences in the idea when speech begins and ends, I performed two metrics. One with a 500 milliseconds collar, one with a 50 milliseconds collar, and one without a collar. 
-A collar is a margin of time around each speaker turn boundary. A 250 milliseconds collar would mean that the 125 milliseconds before and after each speaker change are excluded from evaluation.
+To address systemic differences in the idea when speech begins and ends, I performed two metrics. One with a 500-milliseconds collar, one with a 250-milliseconds collar, and one without a collar. 
+A collar is a margin of time around each speaker's turn boundary. A 250 milliseconds collar would mean that the 125-milliseconds before and after each speaker change is excluded from evaluation.
 
 \begin{figure}
     \centering
@@ -634,10 +634,10 @@ A collar is a margin of time around each speaker turn boundary. A 250 millisecon
 \end{figure}
 
 Comparing figure \ref{fig:pyanExperiment} to the benchmark results in figure \ref{fig:pyanres}, some interesting observations can be made. 
-Firstly, the measured Confusion rate is significantly lower than in the official benchmarks. Additionally, the average Miss- and False Alarm rates are roughly equivalent to those in the benchmark results. However, my application exhibits a few high outliers, predominantly originating from Zoom meetings. These outliers, as discussed in the previous section, are introduced by the same drawbacks associated with the online meeting environment.
+Firstly, the measured Confusion rate is significantly lower than the official benchmarks. Additionally, the average Miss- and False Alarm rates are roughly equivalent to those in the benchmark results. However, my application exhibits a few high outliers, predominantly originating from Zoom meetings. These outliers, as discussed in the previous section, are introduced by the same drawbacks associated with the online meeting environment.
 Finally, the Diarisation Error Rate, combining all previous mentioned metrics, is again fairly similar to the official benchmarks, even including the Zoom outliers. 
-For all evaluated metrics, the median values are either comparable to- or notably lower than those in the official benchmarks. Indicating a strong general performance.
-One potential reason as to why pyannote seems to perform better on these meetings, is the relative simple structure of the meetings. There is not too much overlapping speech and speakers generally are speaking through good microphones.
+For all evaluated metrics, the median values are either comparable to- or notably lower than those in the official benchmarks, indicating a strong general performance.
+One potential reason as to why pyannote seems to perform better on these meetings, is the relatively simple structure of the meetings. There is not too much overlapping speech and speakers generally are speaking through good microphones.
 
 \section{Agenda point segmentation}
 Some meetings already had their agenda points uploaded and available in the archive. By using these pre-labeled agenda points as a ground truth, I tested the created topic segmentation script described in section \ref{sec:agendapoints}, thus answering research question 3.
