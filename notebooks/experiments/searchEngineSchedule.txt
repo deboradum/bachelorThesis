@@ -1,0 +1,89 @@
+Q1 - http://localhost:5173/#/gemeente/hoekschewaard/vergaderingen/2023/1068492 - Wat is de belangrijkste reden die wordt gegeven voor het uitstellen van de harmonisatie van buitensport?
+Q2 - http://localhost:5173/#/gemeente/ridderkerk/vergaderingen/2022/986115 - Wat zijn de verwachte voordelen van het installeren van tuintjes rondom ondergrondse containers?
+Q3 - http://localhost:5173/#/gemeente/ridderkerk/vergaderingen/2024/1147214 - Wat is het verschil tussen het eerste- en het tweede speelterreintje?
+Q4 - http://localhost:5173/#/gemeente/barendrecht/vergaderingen/2023/1079620 - Hoe laat wordt de inspreker gewekt door de bromtonen van de nabijliggende windmolens?
+Q5 - http://localhost:5173/#/gemeente/barendrecht/vergaderingen/2024/1203462 - Wat is het doel van het voorstel met betrekking tot de gemeenschappelijke regeling van de bedrijfsvoeringspartner?
+
+LOTTE
+contemporary way ; Q1       XX seconds
+vector search ; Q2          72 seconds
+BM25 search ; Q3            12 seconds
+hybrid search ; Q4          68 seconds
+chat ; Q5                   8 seconds
+
+RENSKE
+contemporary way ; Q1       XX seconds
+vector search ; Q5          7 seconds
+BM25 search ; Q3            61 seconds
+hybrid search ; Q4          129 seconds
+chat ; Q2                   5 seconds
+
+VINCENT
+contemporary way ; Q3       XX seconds
+vector search ; Q4          15 seconds
+BM25 sarch ; Q1             60 seconds
+hybrid search ; Q2          33 seconds
+chat ; Q5                   6 seconds
+
+PIM
+contemporary way ; Q5       XX seconds
+vector search ; Q3          40 seconds
+BM25 search ; Q4            27 seconds
+hybrid search ; Q2          30 seconds
+chat ; Q1                   21 seconds
+
+PEPIJN
+contemporary way ; Q1       88 seconds
+vector search ; Q4          12 seconds
+BM25 search ; Q5            16 seconds
+hybrid search ; Q2          29 seconds
+chat ; Q3                   7 seconds
+
+JURRIAAN
+contemporary way ; Q4       144 seconds
+vector search ; Q1          41 seconds
+BM25 search ; Q2            23 seconds
+hybrid search ; Q5          30 seconds
+chat ; Q3                   35 seconds
+
+JOCHEM
+contemporary way ; Q5       XX seconds
+vector search ; Q4          20 seconds
+BM25 search ; Q1            13 seconds
+hybrid search ; Q3          26 seconds
+chat ; Q2                   6 seconds
+
+DEVRIM
+contemporary way ; Q2       130 seconds
+vector search ; Q1          34 seconds
+BM25 search ; Q5            24 seconds
+hybrid search ; Q3          14 seconds
+chat ; Q4                   XX seconds
+
+RAVI
+contemporary way ; Q2       XX seconds
+vector search ; Q3          21 seconds
+BM25 search ; Q4            18 seconds
+hybrid search ; Q5          15 seconds
+chat ; Q1                   16 seconds
+
+DAAN
+contemporary way ; Q3       XX seconds
+vector search ; Q2          32 seconds
+BM25 search ; Q1            28 seconds
+hybrid search ; Q5          47 seconds
+chat ; Q4                   XX seconds
+
+NIELS
+contemporary way ; Q1       91 seconds
+vector search ; Q4          26 seconds
+BM25 search ; Q3            44 seconds
+hybrid search ; Q5          42 seconds
+chat ; Q2                   16 seconds
+
+JORDY
+contemporary way ; Q2       XX seconds
+vector search ; Q3          38 seconds
+BM25 search ; Q5            30 seconds
+hybrid search ; Q1          36 seconds
+chat ; Q4                   XX seconds

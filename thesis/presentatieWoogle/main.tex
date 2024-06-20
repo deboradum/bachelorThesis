@@ -14,9 +14,18 @@
 \documentclass[aspectratio=169,sidebar]{uva-inf-presentation}
 \usepackage[english]{babel}
 \usepackage{listings}
+\usepackage[usenames,dvipsnames]{xcolor}
 
 % Vul hieronder de gevraagde gegevens in, 
 % meerdere auteurs en UvAnetID's gescheiden door een puntkomma 
+
+% ouderwetseIn de video ouderwetste manier vs video
+% resultaten grafiek duidelijker maken en misschien niet de andere zoekmethoden doen
+
+
+% N enzo bij resultaten erbij zetten
+% DER en moeilijke dingen enzo in laatste slide na conclusie kort uitleggen/ defineren
+
 \title{AI-Driven Retrieval and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, and Retrieval Augmented Generation} 
 \authors{Pepijn van WIjk}
 \uvanetids{13952072}
@@ -34,26 +43,56 @@
 \titlepage
 \end{titelframe}
 
-\begin{titelframe}\frametitle{Contents}
-\tableofcontents
+\title{AI-Driven Retrieval and Analysis of \colorbox{yellow}{Videotaped Council Meeting Archives} using Automatic Speech Recognition, Speaker Identification, and Retrieval Augmented Generation} 
+\begin{titelframe}
+\titlepage
 \end{titelframe}
+
+\title{\colorbox{yellow}{AI-Driven Retrieval} and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, and Retrieval Augmented Generation} 
+\begin{titelframe}
+\titlepage
+\end{titelframe}
+
+\title{AI-Driven Retrieval and Analysis of Videotaped Council Meeting Archives using \colorbox{yellow}{Automatic Speech Recognition, Speaker} \colorbox{yellow}{Identification, and Retrieval Augmented}  \colorbox{yellow}{Generation}} 
+\begin{titelframe}
+\titlepage
+\end{titelframe}
+
+
+\title{AI-Driven Retrieval and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, and Retrieval Augmented Generation} 
+% \begin{titelframe}\frametitle{Contents}
+% \tableofcontents
+% \end{titelframe}
 
 %-------------------------------------------------------------------------------
 %	PRESENTATIE SLIDES
 %------------------------------------------------------------------------------
 
-\section{Problem}
-\begin{frame}{Problem}
-    \begin{itemize}
-        \item Wet Open Overheid
-        \item Tweede Kamer publishes reports
-        \item Difficult for hundreds of local governments
-        \item journalist writing about a local meeting decision
-    \end{itemize}
+% \section{Problem}
+% \begin{frame}{Problem}
+%     \begin{itemize}
+%         \item Wet Open Overheid
+%         \item Tweede Kamer publishes reports
+%         \item Difficult for hundreds of local governments
+%         \item journalist writing about a local meeting decision
+%     \end{itemize}
+% \end{frame}
+
+
+\begin{frame}{Searching through meetings}
+    \begin{quote}
+        What are the expected advantages to the installation of the gardens surrounding underground trash containers?
+    \end{quote}
 \end{frame}
 
-\section{Solution}
-\begin{frame}{Solution}
+% Een vraag van de test doen, de verschillen in zoektochten laten zien ezno
+\section{Demo}
+\begin{frame}\frametitle{Demo}
+<demo link>
+\end{frame}
+
+\section{How we solved the problem}
+\begin{frame}{How we solved the problem}
     \begin{itemize}
         \item Automatic archiving tool
         \item Automatic analysis of meetings
@@ -76,30 +115,30 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}\frametitle{Scraper}
-\begin{itemize}
-    \item iBabs \& NotuBiz
-    \item Downloads videos
-    \item Downloads agendas when available
-    \item Organizes archive based on year and meeting type
-\end{itemize}
-\end{frame}
+% \begin{frame}\frametitle{Scraper}
+% \begin{itemize}
+%     \item iBabs \& NotuBiz
+%     \item Downloads videos
+%     \item Downloads agendas when available
+%     \item Organizes archive based on year and meeting type
+% \end{itemize}
+% \end{frame}
 
-\begin{frame}\frametitle{Architecture}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.99\textwidth]{images/arch.png}
-    \label{fig:pipeline}
-\end{figure}
-\end{frame}
+% \begin{frame}\frametitle{Architecture}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.99\textwidth]{images/arch.png}
+%     \label{fig:pipeline}
+% \end{figure}
+% \end{frame}
 
 \begin{frame}\frametitle{Analysis}
 \begin{itemize}
-    \item Transcription: 'What is being said?'
+    \item Speech to text
     \begin{itemize}
         \item OpenAI's Whisper
     \end{itemize}
-    \item Diarisation: 'Who said what?'
+    \item Speaker recognition
     \begin{itemize}
         \item pyannote.audio
     \end{itemize}
@@ -116,43 +155,39 @@
 \end{figure}
 \end{frame}
 
-\begin{frame}\frametitle{Architecture}
+% \begin{frame}\frametitle{Architecture}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.99\textwidth]{images/arch.png}
+%     \label{fig:pipeline}
+% \end{figure}
+% \end{frame}
+
+% \section{Results}
+% \begin{frame}\frametitle{Transcription results}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.67\textwidth]{images/whisperBench.png}
+%     \label{fig:pipeline}
+% \end{figure}
+% \end{frame}
+
+% \begin{frame}\frametitle{Diarisation results}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.65\textwidth]{images/der_error_rates_box_plot.png}
+%     \label{fig:pipeline}
+% \end{figure}
+% \end{frame}
+
+\begin{frame}\frametitle{Does our solution work?}
 \begin{figure}
     \centering
-    \includegraphics[width=0.99\textwidth]{images/arch.png}
+    \includegraphics[width=0.79\textwidth]{images/search_engine_results_2.png}
     \label{fig:pipeline}
 \end{figure}
 \end{frame}
 
-\section{Results}
-\begin{frame}\frametitle{Transcription results}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.67\textwidth]{images/whisperBench.png}
-    \label{fig:pipeline}
-\end{figure}
-\end{frame}
-
-\begin{frame}\frametitle{Diarisation results}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.65\textwidth]{images/der_error_rates_box_plot.png}
-    \label{fig:pipeline}
-\end{figure}
-\end{frame}
-
-\begin{frame}\frametitle{Search engine results}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.75\textwidth]{images/search_methods_box_plot.png}
-    \label{fig:pipeline}
-\end{figure}
-\end{frame}
-
-\section{Demo}
-\begin{frame}\frametitle{Demo}
-<demo link>
-\end{frame}
 
 \section{Conclusion}
 \begin{frame}\frametitle{Conclusion}
