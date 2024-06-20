@@ -32,3 +32,13 @@ question. When no usable context is given, the AI model will tell you the questi
 answerable with the available context. While this can be a useful feature, current AI
 technology is not yet at a point where hallucinations and mistakes can be 100% prevented.
 Thus, answers from the chat functions should always be verified.
+
+------
+
+Currently, when searching for a specific piece of information, one would need to
+either watch the entire meeting, which can easily end up being three to four hours,
+or skip through the video a couple minutes at a time, leading to easily missing some
+piece of information.
+
+Now, it is possible to simply search for the question or context, and the most relevant
+speeches will be returned.
