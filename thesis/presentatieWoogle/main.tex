@@ -69,53 +69,95 @@
 
 \section{Methodology}
 \begin{frame}\frametitle{Architecture}
-
-\end{frame}
-
-\begin{frame}\frametitle{Architecture - scraper}
-
+\begin{figure}
+    \centering
+    \includegraphics[width=0.99\textwidth]{images/arch.png}
+    \label{fig:pipeline}
+\end{figure}
 \end{frame}
 
 \begin{frame}\frametitle{Scraper}
 \begin{itemize}
     \item iBabs \& NotuBiz
-    \item Downloads video 
-    \item Downloads agenda when available
+    \item Downloads videos
+    \item Downloads agendas when available
     \item Organizes archive based on year and meeting type
 \end{itemize}
 \end{frame}
 
 \begin{frame}\frametitle{Architecture}
-
+\begin{figure}
+    \centering
+    \includegraphics[width=0.99\textwidth]{images/arch.png}
+    \label{fig:pipeline}
+\end{figure}
 \end{frame}
 
-\begin{frame}\frametitle{Architecture - analysis}
-
-\end{frame}
-
-\begin{frame}\frametitle{Analysis pipeline}
+\begin{frame}\frametitle{Analysis}
 \begin{itemize}
-    \item
+    \item Transcription: 'What is being said?'
+    \begin{itemize}
+        \item OpenAI's Whisper
+    \end{itemize}
+    \item Diarisation: 'Who said what?'
+    \begin{itemize}
+        \item pyannote.audio
+    \end{itemize}
+    \item Manual speaker naming
+    \item Database
 \end{itemize}
 \end{frame}
 
-\begin{frame}\frametitle{Architecture}
+\begin{frame}\frametitle{Analysis pipeline}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/pipeline.png}
+    \label{fig:pipeline}
+\end{figure}
+\end{frame}
 
+\begin{frame}\frametitle{Architecture}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.99\textwidth]{images/arch.png}
+    \label{fig:pipeline}
+\end{figure}
+\end{frame}
+
+\section{Results}
+\begin{frame}\frametitle{Transcription results}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.67\textwidth]{images/whisperBench.png}
+    \label{fig:pipeline}
+\end{figure}
+\end{frame}
+
+\begin{frame}\frametitle{Diarisation results}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.65\textwidth]{images/der_error_rates_box_plot.png}
+    \label{fig:pipeline}
+\end{figure}
+\end{frame}
+
+\begin{frame}\frametitle{Search engine results}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.75\textwidth]{images/search_methods_box_plot.png}
+    \label{fig:pipeline}
+\end{figure}
 \end{frame}
 
 \section{Demo}
 \begin{frame}\frametitle{Demo}
-\end{frame}
-
-\section{Results}
-\begin{frame}\frametitle{Results}
-
+<demo link>
 \end{frame}
 
 \section{Conclusion}
 \begin{frame}\frametitle{Conclusion}
 \begin{itemize}
-    \item Hard to navigate and find through multi-hour long municipal meetings
+    \item Hard to navigate and find information through multi-hour long municipal meetings
     \begin{itemize}
         \item Automatic iBabs \& NotuBiz scrape tools
         \item Speaker diarisation \& automatic speech recognition
