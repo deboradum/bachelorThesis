@@ -1,0 +1,89 @@
+--------------SLIDE 1--------------
+Hello everybody, my name is Pepijn and for the last couple months I have been
+working on making searching through large governmental video archives easier
+with the help of the recent advancements in AI.
+--------------SLIDE 2--------------
+First I'm going to explain the problem at hand a bit, then I'll talk about the
+developed solution and how it is implemented. We'll talk briefly about the results
+of the implementation and then I'll show you a quick demonstration video showing
+how the search engine works.
+--------------SLIDE 3--------------
+Two years ago, in 2022, the Dutch government launched the 'Wet Open Overheid',
+with the aim of making the Dutch legislation process more open and public for
+everyday citizens. It forces governmental bodies - large and small - to publicise
+documents, meetings, and more.
+The Dutch House of Representatives - de Tweede Kamer - has multiple people that
+will manually transcribe and process meetings, resulting in a clear document
+containing who and what was being said at every moment in the meeting. While this
+is possible for large institutions, the hundreds of municipalities, waterschappen
+and provinces just don't have the money and manpower to make such a report for
+every meeting, meaning they will just upload a video of the meeting and leave it
+at that.
+Imagine you are a journalist, wanting to write an article about a decision that
+was made by your local legislative body yesterday. Currently, you would have to
+manually find the part of the meeting where they are talking about the topic at
+hand. These meetings can easily be three, sometimes even four hours long. Thus,
+you would have to either watch through the whole video, or skip over every couple
+minutes with the hope of finding the desired topic.
+--------------SLIDE 4--------------
+The tool I made aims to solve this problem by creating a system that will
+automatically archive an entire given municipality, after which it will analyse
+the meetings using AI transcription and -speaker diarisation tools. When this is
+done, the transcriptions will be searchable with a custom built, AI powerd search
+engine and a chat bot. This all is then packaged in an easy to use web application.
+--------------SLIDE 5--------------
+This is a general overview of the developed architecture. It takes in a desired
+municipality, the desired years and meeting types. The pipeline consists of a web
+scraping part, an analysis part and a search part.
+--------------SLIDE 6--------------
+Currently, the two largest municipality meeting providers are iBabs and NotuBiz.
+Together they host several hundred municipalites. Both of these hosting providers
+are currently supported by the tool, meaning the vast majority of municipalities
+are able to be added to the system with ease.
+The scraping tool will download all videos, and - when available - meeting topics.
+The downloaded files will then be organized based on meeting type and year.
+--------------SLIDE 7--------------
+After the scraping part, the downloaded videos will be analysed.
+--------------SLIDE 8--------------
+The analysis part uses two different AI models: a transcription tool and speaker
+diarisation tool.
+Transcription tries to answer the question of 'What is being said?'.
+For this part, I am using the current state-of-the-art, OpenAI's Whisper. Whisper
+will generate a sentence level transcript, meaning each sentence will be provided
+a starting- and ending time.
+Speaker diarisation aims at answering the question of 'Who spoke when?'. The current
+state-of-the-art is an AI model named pyannote. It will return a file with different
+speakers and the times at which they speak.
+Then there is the option to manually name these speakers. Labeled speakers by pyannote
+will have an arbritrary name. These arbritrary names will only have to be labeled once
+manually, after which their voice profile and associated name is inserted in a database,
+meaning their name will be accesible in any video that contains the same speaker.
+--------------SLIDE 9--------------
+Here you see a detailed architecture of the analysis pipeline. A video will be
+transcribed and diarised, after which they are parsed and inserted in the database.
+The database is indexed on speaking turn level, meaning the searches or done on a
+speaker's entire uninterrupted speaking turn.
+--------------SLIDE 10--------------
+Finally, we come to the last part of the pipeline, which is the searching part.
+The search engine supports various different search methods, namely an AI-based
+semantic search, a probability based keyword search, a hybrid between the two and
+a AI based caht bot.
+--------------SLIDE 11--------------
+?
+--------------SLIDE 12--------------
+?
+--------------SLIDE 13--------------
+?
+--------------SLIDE 14--------------
+Demo:
+--------------SLIDE 15--------------
+To summorize briefly: This project aims at solving the difficulty of searching
+through large video archives, specifically those of governemntal meetings.
+To solve this, I created an automatic scraping tool, capable of scraping the two
+biggest meeting hosting services in the Netherlands.
+After archiving, video analysis is done, transcribing and diarising the videos.
+These transcripts are then made searchable using semantic- and keyword search.
+Finally, a conversational style chat bot has been developed capable of answering
+questions given. This all is then packaged in an easy to use web application.
+
+Thank you for listening are there any questions?
