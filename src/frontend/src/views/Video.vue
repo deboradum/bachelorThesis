@@ -232,7 +232,7 @@ function goToOriginalVideo() {
 }
 
 async function downloadInfo() {
-    const resp = await fetch(`http://${import.meta.env.VITE_API_URL}/api/downloadArchive?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+    const resp = await fetch(`${import.meta.env.VITE_API_URL}/api/downloadArchive?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
     if (!resp.ok) {
         console.error('Failed to fetch the file:', resp.statusText);
         return;
@@ -250,7 +250,7 @@ async function downloadInfo() {
 }
 
 async function downloadTranscript() {
-    const resp = await fetch(`http://${import.meta.env.VITE_API_URL}/api/downloadTranscript?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
+    const resp = await fetch(`${import.meta.env.VITE_API_URL}/api/downloadTranscript?gemeente=${route.params.gemeenteName}&meetingType=${route.params.gemeenteType}&year=${route.params.gemeenteYear}&video=${route.params.videoID}.mp4`)
     if (!resp.ok) {
         console.error('Failed to fetch transcript:', resp.statusText);
         return;
