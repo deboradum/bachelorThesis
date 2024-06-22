@@ -95,7 +95,7 @@ async function getSpeakerName(speakerID) {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ code: route.params.videoID, speakerID: speakerID })
     };
-    const nameResponse = await fetch(`http://${import.meta.env.VITE_API_URL}/api/weaviate/getSpeakerName`, options)
+    const nameResponse = await fetch(`${import.meta.env.VITE_API_URL}/api/weaviate/getSpeakerName`, options)
     const data = await nameResponse.json();
 
     return data.name
