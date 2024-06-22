@@ -14,11 +14,21 @@
 \documentclass[aspectratio=169,sidebar]{uva-inf-presentation}
 \usepackage[english]{babel}
 \usepackage{listings}
+\usepackage{hyperref}
+\usepackage[usenames,dvipsnames]{xcolor}
 
 % Vul hieronder de gevraagde gegevens in, 
 % meerdere auteurs en UvAnetID's gescheiden door een puntkomma 
+
+% ouderwetseIn de video ouderwetste manier vs video
+% resultaten grafiek duidelijker maken en misschien niet de andere zoekmethoden doen
+
+
+% N enzo bij resultaten erbij zetten
+% DER en moeilijke dingen enzo in laatste slide na conclusie kort uitleggen/ defineren
+
 \title{AI-Driven Retrieval and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, and Retrieval Augmented Generation} 
-\authors{Pepijn van WIjk}
+\authors{Pepijn van Wijk}
 \uvanetids{13952072}
 \course{Bachelor thesis}
 \tutor{}
@@ -34,241 +44,176 @@
 \titlepage
 \end{titelframe}
 
-\begin{frame}{Introduction}
-    \begin{itemize}
-        \item Wet Open Overheid
-        \begin{itemize}
-            \item \textbf{Active Publication}: Government bodies should actively publish certain types of information.
-            \item \textbf{Publication on Request}: Information should be made public upon request.
-            \item \textbf{Information Management Obligation}: All information should be easily accessible.
-        \end{itemize}
-        \item WooGle provides document search
-        \item Example: journalist writing about a local meeting decision
-    \end{itemize}
-\end{frame}
-
-\begin{titelframe}\frametitle{Contents}
-\tableofcontents
+\title{AI-Driven Retrieval and Analysis of \colorbox{yellow}{Videotaped Council Meeting Archives} using Automatic Speech Recognition, Speaker Identification, and Retrieval Augmented Generation} 
+\begin{titelframe}
+\titlepage
 \end{titelframe}
+
+\title{\colorbox{yellow}{AI-Driven Retrieval} and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, \colorbox{yellow}{and Retrieval Augmented} \colorbox{yellow}{Generation}}
+\begin{titelframe}
+\titlepage
+\end{titelframe}
+
+\title{AI-Driven Retrieval and \colorbox{yellow}{Analysis} of Videotaped Council Meeting Archives using \colorbox{yellow}{Automatic Speech Recognition, Speaker} \colorbox{yellow}{Identification}, and Retrieval Augmented  Generation}
+\begin{titelframe}
+\titlepage
+\end{titelframe}
+
+
+\title{AI-Driven Retrieval and Analysis of Videotaped Council Meeting Archives using Automatic Speech Recognition, Speaker Identification, and Retrieval Augmented Generation} 
+% \begin{titelframe}\frametitle{Contents}
+% \tableofcontents
+% \end{titelframe}
 
 %-------------------------------------------------------------------------------
 %	PRESENTATIE SLIDES
-%-------------------------------------------------------------------------------
+%------------------------------------------------------------------------------
+
+% \section{Problem}
+% \begin{frame}{Problem}
+%     \begin{itemize}
+%         \item Wet Open Overheid
+%         \item Tweede Kamer publishes reports
+%         \item Difficult for hundreds of local governments
+%         \item journalist writing about a local meeting decision
+%     \end{itemize}
+% \end{frame}
 
 
-\section{Research questions}
-% \subsection{Eerste subsectie}
-
-
-\begin{frame}\frametitle{Main research question}\footnotesize
-\begin{itemize}
-    \item How can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils?
-\end{itemize}
+\begin{frame}{Searching through meetings}
+    \begin{quote}
+        What are the expected advantages to the installation of the gardens surrounding underground trash containers?
+    \end{quote}
 \end{frame}
 
-\begin{frame}\frametitle{Research questions}\footnotesize
-\begin{enumerate}
-    \item What are the different archive formats local authorities host in order to comply with the Woo and how are these formats exploited to retrieve as much information as possible?
-    \item What state-of-the-art video- and audio analysis tools can be used to improve searchability of the meetings, and how accurate are these in the given circumstances?
-    \item How accurately can such a video be segmented into the meaningfully different parts which are discussed?
-    \item What state-of-the-art information retrieval techniques can be leveraged to develop an efficient video information retrieval system?
-    \item How well can the developed search system be integrated with a large language model, creating a helpful chat bot capable of answering questions and providing complementary information when needed?
-\end{enumerate}
+% Een vraag van de test doen, de verschillen in zoektochten laten zien ezno
+\section{Demo}
+\begin{frame}\frametitle{Demo}
+\href{http://localhost:5173/\#/gemeente/ridderkerk/vergaderingen/2022/986115}{localhost}
+
+\href{https://videotulen.wooverheid.nl/\#/gemeente/ridderkerk/vergaderingen/2022/986115}{online}
 \end{frame}
 
-
-\section{Background information}
-\begin{frame}\frametitle{Word embeddings}
-\begin{itemize}
-    \item Word feature vectors
-    \begin{itemize}
-        \item Encapsulate semantic meaning
-    \end{itemize}
-    \item Vector search
-    \item Vector database    
-    \item BM25 keyword search
-\end{itemize}
+\begin{frame}{Research question}
+    \begin{quote}
+        How can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils?
+    \end{quote}
 \end{frame}
 
-\begin{frame}{Word feature vector example}
-    \begin{figure}
-    \centering
-    \includegraphics[width=0.85\textwidth]{images/embeddings.png}
-    \caption{A two-dimensional (t-SNE) projection of word embeddings.}
-    \label{fig:embeddings}
-\end{figure}
-\end{frame}
-
-
-% \subsection{Retrieval Augmented Generation}
-\begin{frame}\frametitle{Retrieval Augmented Generation}
-\begin{itemize}
-    \item Chat bot
-    \item Large Language Models
+\section{How we solved the problem}
+\begin{frame}{How we solved the problem}
     \begin{itemize}
-        \item Vast factual information
-        \item Limited by training data
+        \item Automatic archiving tool
+        \item Automatic analysis of meetings
+        \begin{itemize}
+            \item Speech to text
+            \item Speaker segmentation
+        \end{itemize}
+        \item Transcript search engine
+        \item Conversation-style chat bot
+        \item Easy navigable web application
     \end{itemize}
-    \item \Knowledge Knowledge specific queries
-    \begin{itemize}
-        \item Require external information
-        \item Vector database
-    \end{itemize}
-    \item Benefits
-    \begin{itemize}
-        \item More accurate answers
-        \item Reduced hallucinations
-    \end{itemize}
-\end{itemize}
 \end{frame}
 
 \section{Methodology}
-\begin{frame}{Archival Data Extraction}
-    \begin{itemize}
-        \item Research question 1
-        \begin{itemize}
-            \item Archive formats and information retrieval
-        \end{itemize}
-        \item Service Providers
-        \begin{itemize}
-            \item \href{https://www.ibabs.com}{iBabs}
-            \item \href{https://www.notubiz.nl/}{NotuBiz}
-        \end{itemize}
-        \item Video \& agenda scrape tool
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Video- and Audio Analysis}
-    \begin{itemize}
-        \item Research question 2
-        \begin{itemize}
-            \item State-of-the-art analysis tools
-        \end{itemize}
-        \item Automatic Speech Recognition (ASR)
-        \begin{itemize}
-            \item "What has been spoken?"
-            \item Whisper
-        \end{itemize}
-        \item Speaker diarisation
-        \begin{itemize}
-            \item "Who spoke when?"
-            \item pyannote.audio
-        \end{itemize}
-        \item Modular design
-        \begin{itemize}
-            \item Python class inheritance
-            \item Modular and easily upgradable
-        \end{itemize}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}[fragile]{Code Example: Diarisor Class}
-\begin{lstlisting}[language=Python, basicstyle=\footnotesize\ttfamily]
-class Diarisor:
-    def diarise(self, input_file, output_file):
-        print("Diarise method not implemented!")
-        return PyannoteReturnCodes.NOT_IMPLEMENTED
-
-    def embed(self, input_file, from_time, to_time):
-        print("Embed method not implemented!")
-        return PyannoteReturnCodes.NOT_IMPLEMENTED
-
-class pyannote(Diarisor):
-    def diarise(self, input_file, output_file):
-        # Model specific diarise implementation
-
-    def embed(self, input_file, from_time, to_time):
-        # Model specific embed implementation
-\end{lstlisting}
-\end{frame}
-
-\begin{frame}{Agenda Point Segmentation}
-    \begin{itemize}
-        \item Research Question 3
-        \begin{itemize}
-            \item Accurate segmentation of video into topics
-        \end{itemize}
-        \item LLM-Based segmentation
-        \begin{itemize}
-            \item Label important topics
-            \item Identify start times using sliding window
-        \end{itemize}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Information Retrieval}
-    \begin{itemize}
-        \item Research Question 4
-        \begin{itemize}
-            \item State-of-the-art techniques for information retrieval
-        \end{itemize}
-        \item Weaviate vector database client
-        \begin{itemize}
-            \item Vector search, BM25 search, Hybrid search
-            \item Transcript collection
-                \begin{itemize}
-                    \item Speaking turn embedding
-                    \item Voice profile embedding
-                \end{itemize}
-            \item Speaker collection
-                \begin{itemize}
-                    \item Voice profile embedding
-                    \item Voice profile speaker name
-                \end{itemize}
-        \end{itemize}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}{Retrieval Augmented Generation}
-    \begin{itemize}
-        \item Research Question 5
-        \begin{itemize}
-            \item Large language model chat bot
-        \end{itemize}
-        \item Weaviate connection
-        \begin{itemize}
-            \item BM25 search
-            \item Query + context > answer
-        \end{itemize}
-    \end{itemize}
-\end{frame}
-
-\begin{frame}\frametitle{RAG pipeline}
+\begin{frame}\frametitle{Architecture}
 \begin{figure}
     \centering
-    \includegraphics[width=0.9\textwidth]{images/rag.png}
-    \caption{Retrieval Augmented Generation pipeline}
-    \label{fig:rag}
-\end{figure}
-\end{frame}
-
-\section{System architecture}
-\begin{frame}\frametitle{Analysis pipeline}
-\begin{figure}
-    \centering
-    \includegraphics[width=0.7\textwidth]{images/pipeline.png}
-    % \caption{Video analysis pipeline}
+    \includegraphics[width=0.99\textwidth]{images/arch.png}
     \label{fig:pipeline}
 \end{figure}
 \end{frame}
 
-\section{Demo}
-% \subsection{Analysis}
-\begin{frame}\frametitle{Demo}
+% \begin{frame}\frametitle{Scraper}
+% \begin{itemize}
+%     \item iBabs \& NotuBiz
+%     \item Downloads videos
+%     \item Downloads agendas when available
+%     \item Organizes archive based on year and meeting type
+% \end{itemize}
+% \end{frame}
+
+% \begin{frame}\frametitle{Architecture}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.99\textwidth]{images/arch.png}
+%     \label{fig:pipeline}
+% \end{figure}
+% \end{frame}
+
+\begin{frame}\frametitle{Analysis}
+\begin{itemize}
+    \item Speech to text
+    \begin{itemize}
+        \item OpenAI's Whisper
+    \end{itemize}
+    \item Speaker recognition
+    \begin{itemize}
+        \item pyannote.audio
+    \end{itemize}
+    \item Manual speaker naming
+    \item Database
+\end{itemize}
+\end{frame}
+
+\begin{frame}\frametitle{Analysis pipeline}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.6\textwidth]{images/pipeline.png}
+    \label{fig:pipeline}
+\end{figure}
+\end{frame}
+
+\begin{frame}\frametitle{Architecture}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.99\textwidth]{images/arch.png}
+    \label{fig:pipeline}
+\end{figure}
+\end{frame}
+
+% \section{Results}
+% \begin{frame}\frametitle{Transcription results}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.67\textwidth]{images/whisperBench.png}
+%     \label{fig:pipeline}
+% \end{figure}
+% \end{frame}
+
+% \begin{frame}\frametitle{Diarisation results}
+% \begin{figure}
+%     \centering
+%     \includegraphics[width=0.65\textwidth]{images/der_error_rates_box_plot.png}
+%     \label{fig:pipeline}
+% \end{figure}
+% \end{frame}
+
+\begin{frame}\frametitle{Does our solution work?}
+\begin{figure}
+    \centering
+    \includegraphics[width=0.79\textwidth]{images/search_engine_results_2.png}
+    \label{fig:pipeline}
+\end{figure}
 \end{frame}
 
 
 \section{Conclusion}
+\begin{frame}{Research question}
+    \begin{quote}
+        How can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils?
+    \end{quote}
+\end{frame}
 
 \begin{frame}\frametitle{Conclusion}
 \begin{itemize}
-    \item \textit{How can AI be utilized in order to increase information retrievability of large video archives, in particular of democratically elected councils?}
+    \item Improve retrievability of specific information in multi-hour long video meetings
     \begin{itemize}
-        \item iBabs \& NotuBiz scrape tools
+        \item Automatic iBabs \& NotuBiz scrape tools
         \item Speaker diarisation \& automatic speech recognition
-        \item Agenda topic segmentation
-        \item Vector search, BM25 keyword search and hybrid search
+        \item Semantic- and keyword search engine
         \item Chat bot
+        \item Online search application
     \end{itemize}
 \end{itemize}
 \end{frame}
