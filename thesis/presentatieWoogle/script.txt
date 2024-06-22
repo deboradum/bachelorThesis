@@ -1,82 +1,94 @@
 --------------SLIDE 1--------------
 Hello everybody, my name is Pepijn and for the last couple months I have been
-working on making searching through large governmental video archives easier
-with the help of the recent advancements in AI.
+working on my thesis called 'AI-drive retrieval and analysis of videotaped
+council meeting archives using automatic speech recognition, speaker identification
+and retrieval augmented generation'. This is a whole mouthful, so let's break it
+down a bit.
 --------------SLIDE 2--------------
-First I'm going to explain the problem at hand a bit, then I'll talk about the
-developed solution and how it is implemented. We'll talk briefly about the results
-of the implementation and then I'll show you a quick demonstration video showing
-how the search engine works.
+The core of the thesis involves videotaped council meeting archives. These are
+large collections of long videos, with the videos being videotaped government
+meetings. The problem with these videos, is that searching for specific information
+is difficult. These meetings can easily be 3 to 4 hours long, so searching for
+specifc information within can be a hard task.
 --------------SLIDE 3--------------
-Two years ago, in 2022, the Dutch government launched the 'Wet Open Overheid',
-with the aim of making the Dutch legislation process more open and public for
-everyday citizens. It forces governmental bodies - large and small - to publicise
-documents, meetings, and more.
-The Dutch House of Representatives - de Tweede Kamer - has multiple people that
-will manually transcribe and process meetings, resulting in a clear document
-containing who and what was being said at every moment in the meeting. While this
-is possible for large institutions, the hundreds of municipalities, waterschappen
-and provinces just don't have the money and manpower to make such a report for
-every meeting, meaning they will just upload a video of the meeting and leave it
-at that.
-Imagine you are a journalist, wanting to write an article about a decision that
-was made by your local legislative body yesterday. Currently, you would have to
-manually find the part of the meeting where they are talking about the topic at
-hand. These meetings can easily be three, sometimes even four hours long. Thus,
-you would have to either watch through the whole video, or skip over every couple
-minutes with the hope of finding the desired topic.
+So, I created an AI based tool capable of retrieving specifc information from these
+large video archives. Meaning, I made these video archives searchable in a Google-
+like manner so you are able to find specifc information quickly in a multi-hour long
+video. On top of this, I used a relatively new technique called retrieval augmented
+generation to create a conversational style chat bot capable of answering specifc
+questions about a specifc video.
 --------------SLIDE 4--------------
-The tool I made aims to solve this problem by creating a system that will
-automatically archive an entire given municipality, after which it will analyse
-the meetings using AI transcription and -speaker diarisation tools. When this is
-done, the transcriptions will be searchable with a custom built, AI powerd search
-engine and a chat bot. This all is then packaged in an easy to use web application.
+This retrieval is made possible by the AI driven analysis performed on the archived
+videos. The main pieces of analysis done, is the automatic speech recognition, meaning
+the video audio is converted to written text. And teh speaker identification, meaning
+different speakers are distinguished, along with the times at which they are speaking.
 --------------SLIDE 5--------------
-This is a general overview of the developed architecture. It takes in a desired
-municipality, the desired years and meeting types. The pipeline consists of a web
-scraping part, an analysis part and a search part.
---------------SLIDE 6--------------
-Currently, the two largest municipality meeting providers are iBabs and NotuBiz.
-Together they host several hundred municipalites. Both of these hosting providers
-are currently supported by the tool, meaning the vast majority of municipalities
-are able to be added to the system with ease.
-The scraping tool will download all videos, and - when available - meeting topics.
-The downloaded files will then be organized based on meeting type and year.
+So, to make the problem and solution at hand more clear, lets say you want to look
+for the answer to the following question: 'What are the expected advantages to the
+installation of the gardens surrounding underground trash containers?'.
+--------------DEMO--------------
+http://localhost:5173/#/gemeente/ridderkerk/vergaderingen/2022/986115
+Currently, you would have to go to the video and either watch the whole thing, or
+skim through the video, hoping you do not skip the specific part in the video that
+contains the answer. In this case, the video is only 35 minutes, so it is not that
+bad. You can imagine however, that doing the same with a video of 4 hours is a
+difficult task.
+
 --------------SLIDE 7--------------
-After the scraping part, the downloaded videos will be analysed.
+So to briefly summorize how I solved the problem of the difficulty of searching
+for specifc information through long video archives, I firstly created a archiving
+tool that will scrape video meeting and the agenda points. Next, these videos are
+automatically analysed in two different manners: speech to text and speaker segmentation.
+These analysed videos are then made searchable with a transcript search engine, and a
+conversational style chat bot. All these functionalities are then combined into an easily
+navigable web application.
 --------------SLIDE 8--------------
-The analysis part uses two different AI models: a transcription tool and speaker
-diarisation tool.
-Transcription tries to answer the question of 'What is being said?'.
-For this part, I am using the current state-of-the-art, OpenAI's Whisper. Whisper
-will generate a sentence level transcript, meaning each sentence will be provided
-a starting- and ending time.
-Speaker diarisation aims at answering the question of 'Who spoke when?'. The current
-state-of-the-art is an AI model named pyannote. It will return a file with different
-speakers and the times at which they speak.
-Then there is the option to manually name these speakers. Labeled speakers by pyannote
-will have an arbritrary name. These arbritrary names will only have to be labeled once
-manually, after which their voice profile and associated name is inserted in a database,
-meaning their name will be accesible in any video that contains the same speaker.
+The global architecture looks something like this: As you can see, it receives as
+input a government, the years that you want archived and the meeting types, and it
+uses one of two developed scraping tools to archive the whole collection. Together,
+the two hosting providers that the scraper supports host the vast majority of Dutch
+municipalites.
+After scraping, the videos are analysed.
 --------------SLIDE 9--------------
-Here you see a detailed architecture of the analysis pipeline. A video will be
-transcribed and diarised, after which they are parsed and inserted in the database.
-The database is indexed on speaking turn level, meaning the searches or done on a
-speaker's entire uninterrupted speaking turn.
+The analysis consists of two parts: speech to text and speaker recognition. Both
+are done with current state-of-the-art AI models, and they are combined to make
+searching as optimal as possible.
+Then, the different speakers recognised by pyannote will have their voice profiles
+embedded. These voice profiles can then be manually named one time, after which they
+are able to be recognized in any video.
+Finally, all this information is added to a central database allowing for searching
+in the gathered data.
 --------------SLIDE 10--------------
-Finally, we come to the last part of the pipeline, which is the searching part.
-The search engine supports various different search methods, namely an AI-based
-semantic search, a probability based keyword search, a hybrid between the two and
-a AI based caht bot.
+The analysis pipeline looks like this: a video first is transcribed and diarised.
+the speaker recognition and speech to text is then combined to create uninterrupted
+speaking turns, which is how the database is indexed. At the same time, the different
+speakers have their voice profile analysed and the speaking turn along with the voice
+profile are combined and added to the database. On the side, you can see the manual
+labeling of voice profiles and their addition to the database.
 --------------SLIDE 11--------------
-?
+Finally, the search part offers three different search methods: an AI-based semantic
+search, a probability based keyword search, a combination of the two, and a
+conversational style chat bot.
+
+In order to verify whether or not the solution actually works, I gave 13 participants
+the task to answer five questions in the five different manners, with the method and
+question randomly assigned. If an answer could not be found within three minutes, it
+counted as a miss and the search was aborted.
 --------------SLIDE 12--------------
-?
+This gave me the following results. As you can see, the contemporary method of skimming
+through the video performed the worse by far. On average, the answer was found in about
+two minutes. However, in almost 70% of the cases an answer was not found withing the
+given time. The three search methods performed roughly equal, at around 30 to 40 seconds
+with a 0% miss rate.
+The chat mode scored the best, with about 20 seconds search time. Note however, that in
+23% of the cases an answer was not found at all. On top of this, I found that the chat
+method could be quite unreliably at some times. The way it works is that before answering
+a question, the context most relevant to the query is retrieved and fed to the AI model.
+When it occurs that the context is not the desired context, or when no context could be
+found at all, the chat bot will either give a wrong answer, without you knowing, or it could
+tell you it does not know. This is why, it is recommended to verify the answer after getting
+one. This verfication time was not included in this test however.
 --------------SLIDE 13--------------
-?
---------------SLIDE 14--------------
-Demo:
---------------SLIDE 15--------------
 To summorize briefly: This project aims at solving the difficulty of searching
 through large video archives, specifically those of governemntal meetings.
 To solve this, I created an automatic scraping tool, capable of scraping the two
