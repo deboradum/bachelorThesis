@@ -21,3 +21,7 @@ src/models/*
 !src/models/README.md
 !videotulenDemo.mp4
 !src/frontend/.env
+
+!thesis/presentatieWoogle/thesis_presentatie___simpel.pdf
+!thesis/presentatie/thesis_presentatie.pdf
+!thesis/thesis/Thesis_Pepijn_van_Wijk.pdf
